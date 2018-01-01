@@ -291,13 +291,13 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   for (int i=0 ; i<(int)level.map.size() ; i++){
     if (level.map[i].type == 1){
       test++;
-      int translateZ = int(level.width/2);
-      int translateX = int(level.height/2);
+      int translateZ = player.position.x - level.map[i].position.x;
+      int translateX = player.position.y - level.map[i].position.y;
 
-      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-5,translateZ));
-      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,-0.5f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(1, 0, 0));
       pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
-
+/*
       // dessin murs
       if (level.map[i-1].type == 0){
         pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
@@ -311,7 +311,7 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
       
       if (level.map[i+level.width].type == 0){       
         pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
-      }
+      }*/
     }
   }
 }

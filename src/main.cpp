@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
       path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
     }
     else {
-
+      path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
     }
 
     SDL_Delay(1000/60);
