@@ -15,7 +15,7 @@ Game::Game(){
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
   this->window = SDL_CreateWindow(
-                                        "PACIMAC", 400, 200, 640, 640,
+                                        "PACIMAC", 100, 50, 1080, 720,
                                         SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
 
   // Check that the window was successfully created

@@ -17,7 +17,7 @@ int Player::getHealth(){
 }
 
 
-void Player::playerMove(Level level){
+void Player::playerMove(Level level, Camera camera){
   const Uint8 *state = SDL_GetKeyboardState(NULL);
   
   if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
@@ -82,14 +82,18 @@ void Player::playerMove(Level level){
   }
   // CLAVIER TOUCHE A
   else if (state[SDL_SCANCODE_Q]){
-    if (direction == 0) direction = 3;
-    else direction--;
-    SDL_Delay(150);
+    if (camera.currentState == 0){
+      if (direction == 0) direction = 3;
+      else direction--;
+      SDL_Delay(150);
+    }
   }
   // CLAVIER TOUCHE E
   else if (state[SDL_SCANCODE_E]){
-    if (direction == 3) direction = 0;
-    else direction++;
-    SDL_Delay(150);
+    if (camera.currentState == 0){
+      if (direction == 3) direction = 0;
+      else direction++;
+      SDL_Delay(150);
+    }
   }
 }

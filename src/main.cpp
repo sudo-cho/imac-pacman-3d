@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     }
 
     if (!camera.cameraChange(level)) {
-      player.playerMove(level);
+      player.playerMove(level,camera);
     }
 
     /* game draw objects*/

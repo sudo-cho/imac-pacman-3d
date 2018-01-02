@@ -2,6 +2,7 @@
 
 #include "mapobject.hpp"
 #include "level.hpp"
+#include "camera.hpp"
 
 enum directionPlayer { NORD = 0, EST = 1, SUD = 2, OUEST = 3};
 
@@ -15,7 +16,7 @@ public:
   int getHealth();
 
   void takeDamage();
-  void playerMove(Level);
+  void playerMove(Level,Camera);
 
   glm::vec2 position;
   int direction;
