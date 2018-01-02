@@ -28,11 +28,14 @@ class SphereDraw{
 public:
   GLuint vbo, vao;
   glm::mat4 ProjMatrix, MVPMatrix, MVMatrix, NormalMatrix;
+  static GLuint texPacman;
+  static size_t refcount;
 
   SphereDraw(Sphere*);
   ~SphereDraw();
 
   void drawSphere(Sphere*, GLuint, GLuint, GLuint);
+  void drawPacman(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint);
 };
 
 class WallDraw{
@@ -59,3 +62,4 @@ public:
 	void drawPathFirstPerson(GLuint, GLuint, GLuint, Level, Player, GLint);
   void drawPathThirdPerson(GLuint, GLuint, GLuint, Level, Player, GLint);
 };
+

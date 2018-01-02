@@ -68,16 +68,21 @@ void ObjectDraw::drawObject(){
   glBindVertexArray(0);
 }
 
+GLuint SphereDraw::texPacman(0);
+size_t SphereDraw::refcount(0);
+
 SphereDraw::SphereDraw(Sphere * sphere){
+
+  if(!refcount){
+    texPacman = texFromFile("assets/textures/murSimple.png");
+  }
+
+  ++refcount;
+
   glGenBuffers(1, &this->vbo);
   glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 
-  glBufferData(
-                 GL_ARRAY_BUFFER,
-                 sphere->getVertexCount()*sizeof(ShapeVertex),
-                 sphere->getDataPointer(),
-                 GL_STATIC_DRAW
-               );
+  glBufferData(GL_ARRAY_BUFFER, sphere->getVertexCount()*sizeof(ShapeVertex), sphere->getDataPointer(), GL_STATIC_DRAW);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -120,17 +125,10 @@ SphereDraw::SphereDraw(Sphere * sphere){
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
-  // Les matrices
-  this->ProjMatrix = glm::perspective(
-                                          glm::radians(70.f),
-                                          800.f / 600.f,
-                                          0.1f,
-                                          100.f
-                                          );
 
-  this->MVMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -5.0f));
+  // Les matrices
+  this->ProjMatrix = glm::perspective( glm::radians(70.f), 800.f / 600.f, 0.1f, 100.f);
   this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
-  this->MVPMatrix = ProjMatrix * MVMatrix ;
 
   glEnable(GL_DEPTH_TEST);
 
@@ -148,6 +146,30 @@ void SphereDraw::drawSphere(Sphere *sphere, GLuint locationMVPMatrix, GLuint loc
   glBindVertexArray(0);
 
 }
+
+void SphereDraw::drawPacman(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture){
+  glBindVertexArray(this->vao);
+
+  MVMatrix = MVMat;
+
+  glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+  glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+  glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  static const size_t TEXUNIT = 0;
+  glUniform1i(uTexture, TEXUNIT);
+  glActiveTexture(GL_TEXTURE0 + TEXUNIT);
+  glBindTexture(GL_TEXTURE_2D, this->texPacman);
+
+  glDrawArrays(GL_TRIANGLES, 0, sphere->getVertexCount());
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE0);
+
+  glBindVertexArray(0);
+
+}
+
 SphereDraw::~SphereDraw(){
   glDeleteBuffers(1, &this->vbo);
   glDeleteVertexArrays(1, &this->vao);
@@ -278,39 +300,58 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   glm::mat4 MVMat = glm::mat4(1.f);
   static WallDraw pathWall;
 
+  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,5,0));
+  pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, -0.5f, glm::vec3(1,0,0));
+
   for (int i=0 ; i<(int)level.map.size() ; i++){
     if (level.map[i].type == 1){
-      int translateX = (int)level.width/2 - level.map[i].position.x;;
-      int translateY = (int)level.height/2 - level.map[i].position.y;;
+      int translateX = level.map[i].position.x - (int)level.width/2;
+      int translateY = level.map[i].position.y - (int)level.height/2;
 
       MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-10));
       pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
 
       // dessin murs
       if (level.map[i-1].type == 0){
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+        glm::mat4 MVMatWallL = glm::translate(MVMat, glm::vec3(-0.5f, 0, 0.5f));
+        MVMatWallL = glm::rotate(MVMatWallL, 1.5708f, glm::vec3(0, 0, 1));
+        MVMatWallL = glm::rotate(MVMatWallL, 1.5708f, glm::vec3(1, 0, 0));
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallL,uTexture);
       }
-      if (level.map[i+1].type == 0){        
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      if (level.map[i+1].type == 0){
+        glm::mat4 MVMatWallR = glm::translate(MVMat, glm::vec3(0.5f, 0, 0.5f));
+        MVMatWallR = glm::rotate(MVMatWallR, 1.5708f, glm::vec3(0, 0, 1));
+        MVMatWallR = glm::rotate(MVMatWallR, 1.5708f, glm::vec3(1, 0, 0));    
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallR,uTexture);
       }
-      if (level.map[i-level.width].type == 0){        
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      if (level.map[i-level.width].type == 0){
+        glm::mat4 MVMatWallU = glm::translate(MVMat, glm::vec3(0, 0.5f, 0.5f));
+        MVMatWallU = glm::rotate(MVMatWallU, 1.5708f, glm::vec3(1, 0, 0));  
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallU,uTexture);
       }
       
-      if (level.map[i+level.width].type == 0){       
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      if (level.map[i+level.width].type == 0){
+        glm::mat4 MVMatWallD = glm::translate(MVMat, glm::vec3(0, -0.5f, 0.5f));
+        MVMatWallD = glm::rotate(MVMatWallD, 1.5708f, glm::vec3(1, 0, 0));   
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallD,uTexture);
       }
 
     }
   }
-/*
-  // dessin Pacman
-  glimac::Sphere* sphere;
-  SphereDraw pacman = SphereDraw(sphere);
-  MVMat = glm::translate (glm::mat4(1.f), glm::vec3(player.position.x,player.position.y,-10));
-  pacman.drawSphere(sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix);
 
-  */
+  // dessin Pacman
+  Sphere sphere(0.5f, 16, 16);
+  SphereDraw pacman (&sphere);
+  pacman.ProjMatrix = pathWall.ProjMatrix;
+  int translateX = player.position.x - (int)level.width/2;
+  int translateY = player.position.y - (int)level.height/2;
+  MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-9));
+  pacman.drawPacman(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture);
+
+  pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.5f, glm::vec3(1,0,0));
+  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-5,0));
+  pacman.ProjMatrix = pathWall.ProjMatrix;
+
 }
 
 void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, Level level, Player player, GLint uTexture){

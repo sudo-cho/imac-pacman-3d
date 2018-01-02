@@ -69,10 +69,6 @@ int main(int argc, char *argv[])
     /* game draw objects*/
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  /*
-  glm::mat4 MVMat = glm::translate (glm::mat4(1.f), glm::vec3(0.f,-1.f,-2.f));
-  MVMat = glm::rotate(MVMat, 90.f, glm::vec3(1, 0, 0));
-    wall1.drawWall(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, MVMat);*/
 
     if (camera.currentState == 0){
       path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
