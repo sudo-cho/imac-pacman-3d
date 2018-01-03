@@ -1,9 +1,18 @@
 #pragma once
 
-#include <GL/gl.h>
-#include <SDL2/SDL.h>
 #include <glimac/common.hpp>
 #include <glimac/Sphere.hpp>
+#include <glimac/Image.hpp>
+#include <glimac/glm.hpp>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#include <SDL2/SDL.h>
+
 #include "level.hpp"
 #include "camera.hpp"
 #include "player.hpp"

@@ -1,11 +1,3 @@
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <glimac/common.hpp>
-#include <glimac/Sphere.hpp>
-#include <glimac/glm.hpp>
-#include <SDL2/SDL.h>
-#include <glimac/Image.hpp>
-
 #include "draw.hpp"
 
 using namespace glimac;

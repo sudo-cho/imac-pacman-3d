@@ -1,11 +1,17 @@
 #pragma once
 
 #include <iostream>
-#include <glm/glm.hpp>
 #include <string>
+#include <glm/glm.hpp>
+
 #include <GL/glew.h>
-#include <GL/gl.h>
 #include <SDL2/SDL.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 enum typeObjectCollectable {gum = 0, supergum = 1};
 

@@ -1,11 +1,19 @@
 #pragma once
 
 #include <iostream>
-#include <glm/glm.hpp>
 #include <string>
+
 #include <GL/glew.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+
 #include "mapobject.hpp"
 #include "typemonster.hpp"
 
