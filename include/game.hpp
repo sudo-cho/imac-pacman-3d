@@ -8,7 +8,6 @@
 #include <glimac/Program.hpp>
 #include <glimac/FilePath.hpp>
 #include <glimac/common.hpp>
-#include <glimac/Sphere.hpp>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -26,15 +25,19 @@
 using namespace glimac;
 
 class Game{
-public:
-
-  SDL_Window *window;
+  GLuint locationMVPMatrix = 0, locationMVMatrix = 0, locationNormalMatrix = 0;
+  GLint uTexture = 0;
+  SDL_Window * window;
   SDL_GLContext glcontext;
-
+  Level level;
+  Camera camera;
+  Player player;
+  PathDraw path;
+public:
   Game();
   ~Game();
 
-  void initProgram(Program*, GLuint *, GLuint *, GLuint *, GLint *);
-
+  bool initWindow();
+  void initProgram();
+  void render();
 };
-

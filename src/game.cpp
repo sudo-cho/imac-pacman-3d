@@ -2,46 +2,75 @@
 
 using namespace glimac;
 
-Game::Game(){
-  SDL_Init(SDL_INIT_VIDEO);
+Game::Game ()
+  : level(Level((std::string)"assets/level1.dml"))
+  , camera(Camera(glm::vec2(level.begin.position.x, level.begin.position.y), 0))
+  , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 1))
+{
+  this->initWindow();
+  this->initProgram();
+}
+
+Game::~Game () {
+  SDL_GL_DeleteContext(glcontext);
+  SDL_DestroyWindow(window);
+  SDL_Quit();
+}
+
+bool Game::initWindow () {
+  if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+    std::cerr << "SDL_Init(): " << SDL_GetError() << std::endl;
+    return false;
+  }
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-  this->window = SDL_CreateWindow(
-                                        "PACIMAC", 100, 50, 1080, 720,
-                                        SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
-
-  // Check that the window was successfully created
+  window = SDL_CreateWindow("PACIMAC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
   if (window == NULL) {
-    // In the case that the window could not be made...
     printf("Could not create window: %s\n", SDL_GetError());
   }
 
-  this->glcontext = SDL_GL_CreateContext(window);
+  glcontext = SDL_GL_CreateContext(window);
 
-  // Initialisation de GLEW; nous verrons dans le prochain TP à quoi cela sert.
   GLint error;
   if(GLEW_OK != (error = glewInit())) {
-    std::cerr << "Impossible d'initialiser Glew" << std::endl;
+    std::cerr << "Cold not initialize Glew" << std::endl;
   }
 
+  glEnable(GL_DEPTH_TEST);
+  // glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  std::cout << "GLEW " << glewGetString(GLEW_VERSION) << std::endl;
   std::cout << glGetString(GL_VERSION) << std::endl;
+
+  return true;
 }
 
-Game::~Game(){
-  SDL_GL_DeleteContext(this->glcontext);
-	SDL_Quit();
+void Game::initProgram () {
+  Program program = loadProgram("assets/shaders/3D.vs.glsl", "assets/shaders/normals.fs.glsl");
+  program.use();
+
+  locationMVPMatrix = glGetUniformLocation(program.getGLId(), "uMVPMatrix");
+  locationMVMatrix = glGetUniformLocation(program.getGLId(), "uMVMatrix");
+  locationNormalMatrix = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
+  uTexture = glGetUniformLocation(program.getGLId(), "uTexture");
 }
+void Game::render () {
+  if (!camera.cameraChange(level)) {
+    player.playerMove(level,camera);
+  }
 
-void Game::initProgram(Program *program, GLuint *locationMVPMatrix, GLuint *locationMVMatrix, GLuint *locationNormalMatrix,GLint *uTexture){
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  *program = loadProgram(
-                         "assets/shaders/3D.vs.glsl",
-                         "assets/shaders/normals.fs.glsl"
-                         );
-  program->use();
+  if (camera.currentState == 0){
+    path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+  }
+  else {
+    path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+  }
 
-  *locationMVPMatrix = glGetUniformLocation(program->getGLId(), "uMVPMatrix");
-  *locationMVMatrix = glGetUniformLocation(program->getGLId(), "uMVMatrix");
-  *locationNormalMatrix = glGetUniformLocation(program->getGLId(), "uNormalMatrix");
-  *uTexture = glGetUniformLocation(program->getGLId(), "uTexture");
+  SDL_Delay(1000/60);
+  SDL_GL_SwapWindow(window);
 }
