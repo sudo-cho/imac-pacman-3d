@@ -1,11 +1,3 @@
-#include <iostream>
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <SDL2/SDL.h>
-#include <glimac/Program.hpp>
-#include <glimac/FilePath.hpp>
-#include <assert.h>
-
 #include "game.hpp"
 
 using namespace glimac;

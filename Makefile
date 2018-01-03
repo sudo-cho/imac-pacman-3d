@@ -29,7 +29,7 @@ cxxflags := $(strip \
 cppfiles := $(call rglob,src,*.cpp)
 ofiles   := $(patsubst src/%.cpp,obj/%.o,$(cppfiles))
 
-exe      := pacimac$(dot_exe)
+exe      := bin/pacimac$(dot_exe)
 
 ifeq ($(host_os),windows)
 SHELL=cmd

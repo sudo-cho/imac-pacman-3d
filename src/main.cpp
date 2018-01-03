@@ -1,18 +1,4 @@
-#include <iostream>
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <SDL2/SDL.h>
-#include <string>
-#include <glimac/common.hpp>
-#include <glimac/Sphere.hpp>
-
-#include "typemonster.hpp"
-#include "monster.hpp"
-#include "level.hpp"
 #include "game.hpp"
-#include "draw.hpp"
-#include "player.hpp"
-#include "camera.hpp"
 
 using namespace std;
 using namespace glimac;
