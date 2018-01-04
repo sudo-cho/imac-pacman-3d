@@ -21,6 +21,7 @@
 #include "draw.hpp"
 #include "player.hpp"
 #include "camera.hpp"
+#include <startMenu.hpp>
 
 using namespace glimac;
 
@@ -39,5 +40,6 @@ public:
 
   bool initWindow();
   void initProgram();
+  // void initMenu();
   void render();
 };

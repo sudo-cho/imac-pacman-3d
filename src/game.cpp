@@ -57,6 +57,7 @@ void Game::initProgram () {
   locationNormalMatrix = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
   uTexture = glGetUniformLocation(program.getGLId(), "uTexture");
 }
+
 void Game::render () {
   if (!camera.cameraChange(level)) {
     player.playerMove(level,camera);
@@ -74,3 +75,8 @@ void Game::render () {
   SDL_Delay(1000/60);
   SDL_GL_SwapWindow(window);
 }
+
+// void Game::initMenu () {
+//   MenuDraw menuDraw;
+//   menuDraw.drawMenu();
+// }
