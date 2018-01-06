@@ -24,15 +24,6 @@ struct Vertex2DUV{
   Vertex2DUV(float x, float y, float u, float v);
 };
 
-class ObjectDraw{
-public:
-  GLuint vbo, vao;
-
-  ObjectDraw();
-
-  void drawObject();
-};
-
 class SphereDraw{
 public:
   GLuint vbo, vao;

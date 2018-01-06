@@ -20,11 +20,12 @@ int CALLBACK WinMain(
   bool _continue = true;
   while(_continue){
     SDL_Event e;
+    game.render();
     while(SDL_PollEvent(&e)) {
       if(e.type == SDL_QUIT) {
         _continue = false;
       }
-      game.render();
+      //game.render();
     }
   }
   return 0;

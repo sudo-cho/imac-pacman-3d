@@ -6,22 +6,24 @@
 #include <sstream>
 #include <vector>
 
-#include "monster.hpp"
+#include "ghost.hpp"
+#include "player.hpp"
 #include "case.hpp"
 
 class Level {
 public:
 	Level(std::string);
 	~Level();
-	void printLevelTest();
 	void readImageFile(std::string);
 	void createObjectFromLine(int,std::string);
 	int width;
 	int height;
-	int nbMonsters;
 	Case begin;
-	Case end;
+	Case out1;
+	Case out2;
 	std::vector<Case> map;
-	std::vector<Monster> monsters;
+	std::vector<Ghost> ghosts;
 	Case getCaseFromPos(glm::vec2);
+
+	void moveObjects(Player *player);
 };

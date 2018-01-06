@@ -4,7 +4,7 @@ using namespace glimac;
 
 Game::Game ()
   : level(Level((std::string)"assets/level1.dml"))
-  , camera(Camera(glm::vec2(level.begin.position.x, level.begin.position.y), 0))
+  , camera(Camera(1))
   , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 1))
 {
   this->initWindow();
@@ -35,7 +35,7 @@ bool Game::initWindow () {
 
   GLint error;
   if(GLEW_OK != (error = glewInit())) {
-    std::cerr << "Cold not initialize Glew" << std::endl;
+    std::cerr << "Could not initialize Glew" << std::endl;
   }
 
   glEnable(GL_DEPTH_TEST);
@@ -58,8 +58,10 @@ void Game::initProgram () {
   uTexture = glGetUniformLocation(program.getGLId(), "uTexture");
 }
 void Game::render () {
-  if (!camera.cameraChange(level)) {
-    player.playerMove(level,camera);
+  if (!camera.cameraChange()) {
+    player.playerChangeDir(camera);
+    level.moveObjects(&player);
+    SDL_Delay(100);
   }
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

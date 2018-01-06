@@ -22,43 +22,6 @@ Vertex2DUV::Vertex2DUV(float x, float y, float u, float v)
     : position(x,y), texcoords(u,v)
     {}
 
-ObjectDraw::ObjectDraw(){
-  /* VERTEX BUFFER OBJECT */
-
-	glGenBuffers(1, &this->vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-
-	GLfloat vertices[] = {
-		-0.5f, -0.5f,
-		0.5f, -0.5f,
-		0.f, 0.5f
-	};
-
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-  /* VERTEX ARRAY OBJECT */
-	glGenVertexArrays(1, &this->vao);
-	glBindVertexArray(this->vao);
-
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-	glVertexAttribPointer(0, 2, GL_FLOAT,GL_FALSE, 2 * sizeof(GLfloat), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-
-}
-
-void ObjectDraw::drawObject(){
-  glBindVertexArray(this->vao);
-
-  glDrawArrays(GL_TRIANGLES,0,3);
-
-  glBindVertexArray(0);
-}
 
 GLuint SphereDraw::texPacman(0);
 size_t SphereDraw::refcount(0);
@@ -292,15 +255,16 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   glm::mat4 MVMat = glm::mat4(1.f);
   static WallDraw pathWall;
 
-  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,5,0));
+  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,12,0));
   pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, -0.5f, glm::vec3(1,0,0));
 
   for (int i=0 ; i<(int)level.map.size() ; i++){
-    if (level.map[i].type == 1){
+    if (level.map[i].type != 0){
+      // dessin chemin
       int translateX = level.map[i].position.x - (int)level.width/2;
       int translateY = level.map[i].position.y - (int)level.height/2;
 
-      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-10));
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-18));
       pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
 
       // dessin murs
@@ -337,11 +301,11 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   pacman.ProjMatrix = pathWall.ProjMatrix;
   int translateX = player.position.x - (int)level.width/2;
   int translateY = player.position.y - (int)level.height/2;
-  MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-9));
+  MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
   pacman.drawPacman(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture);
 
   pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.5f, glm::vec3(1,0,0));
-  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-5,0));
+  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-12,0));
   pacman.ProjMatrix = pathWall.ProjMatrix;
 
 }
@@ -351,7 +315,7 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   static WallDraw pathWall;
 
 	for (int i=0 ; i<(int)level.map.size() ; i++){
-		if (level.map[i].type == 1){
+		if (level.map[i].type != 0){
 			int translateZ = player.position.x - level.map[i].position.x;
 			int translateX = player.position.y - level.map[i].position.y;
 			if (player.direction == 0){

@@ -2,7 +2,6 @@
 
 using namespace std;
 
-// source : http://stackoverflow.com/questions/236129/split-a-string-in-c
 void split(const string &s, char delim, vector<string> &elems) {
     stringstream ss;
     ss.str(s);
@@ -101,28 +100,22 @@ void Level::readImageFile(string imageFile){
 	for (int n = 0 ; n < (int)elems.size() ; n++){
 		if (elems[n][0] == 0 && elems[n][1] == 0 && elems[n][2] == 0) map.push_back(Case(glm::vec2(row,col), empty));
 		else if (elems[n][0] == 255 && elems[n][1] == 255 && elems[n][2] == 255) map.push_back(Case(glm::vec2(row,col), path));
-		else if (elems[n][0] == 255 && elems[n][1] == 0 && elems[n][2] == 0) {
+		else if (elems[n][0] == 0 && elems[n][1] == 255 && elems[n][2] == 0) {
 			map.push_back(Case(glm::vec2(row,col), in));
 			begin = Case(glm::vec2(row,col),in);
 		}
-		else if (elems[n][0] == 0 && elems[n][1] == 255 && elems[n][2] == 0) {
+		else if (elems[n][0] == 255 && elems[n][1] == 0 && elems[n][2] == 0) {
 			map.push_back(Case(glm::vec2(row,col), out));
-			end = Case(glm::vec2(row,col),out);
+			out1 = Case(glm::vec2(row,col),out);
+			//out2 = Case(glm::vec2(row,col),out);
 		}
 		if (row == width -1) row = 0;
 		else row++;
-		col = (n-row)/(width-1);
+		col = (n-row+1)/(width);
 	}
 	
 	this->width = width;
 	this->height = height;
-}
-
-void Level::printLevelTest(){
-	for (int n=0 ; n < (int)map.size() ; n++){
-		cout << map[n].type ;
-		if (map[n].position.x == width-1) cout << endl;
-	}
 }
 
 Case Level::getCaseFromPos(glm::vec2 pos){
@@ -131,4 +124,16 @@ Case Level::getCaseFromPos(glm::vec2 pos){
 		if (map[n].position.x == pos.x && map[n].position.y == pos.y) return map[n];
 	}
 	return caseNull;
+}
+
+
+void Level::moveObjects(Player *player){
+  if (player->direction == NORD && getCaseFromPos(glm::vec2(player->position.x, player->position.y -1)).type != 0) player->position.y -= 1;
+  else if (player->direction == SUD && getCaseFromPos(glm::vec2(player->position.x, player->position.y +1)).type != 0) player->position.y += 1;
+  else if (player->direction == OUEST && getCaseFromPos(glm::vec2(player->position.x -1, player->position.y)).type != 0) player->position.x -= 1;
+  else if (player->direction == EST && getCaseFromPos(glm::vec2(player->position.x +1, player->position.y)).type != 0) player->position.x += 1;
+
+  for(int i=0; i < (int)ghosts.size(); i++){
+  	ghosts[i].move(player->position, player->direction, this->map);
+  }
 }

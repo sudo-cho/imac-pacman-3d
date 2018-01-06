@@ -15,8 +15,7 @@
 #include <GL/gl.h>
 #endif
 
-#include "typemonster.hpp"
-#include "monster.hpp"
+#include "ghost.hpp"
 #include "level.hpp"
 #include "draw.hpp"
 #include "player.hpp"

@@ -1,17 +1,13 @@
 #include "camera.hpp"
 
-Camera::Camera(){
+Camera::Camera(int state){
+	currentState = state;
 }
 
 Camera::~Camera(){
 }
 
-Camera::Camera(glm::vec2 pos, int state){
-	position = pos;
-	currentState = state;
-}
-
-bool Camera::cameraChange(Level level){
+bool Camera::cameraChange(){
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	// CLAVIER TOUCHE C

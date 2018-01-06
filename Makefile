@@ -29,17 +29,20 @@ cxxflags := $(strip \
 cppfiles := $(call rglob,src,*.cpp)
 ofiles   := $(patsubst src/%.cpp,obj/%.o,$(cppfiles))
 
-exe      := bin/pacimac$(dot_exe)
+
 
 ifeq ($(host_os),windows)
+exe      := pacimac$(dot_exe)
 SHELL=cmd
 SHELLFLAGS=/c 
 ldlibs   := -lSDL2 -lopengl32
 endif
 ifeq ($(host_os),linux)
+exe      := bin/pacimac$(dot_exe)
 ldlibs   := -lSDL2 -lGL
 endif
 ifeq ($(host_os),osx)
+exe      := bin/pacimac$(dot_exe)
 ldlibs   := -framework SDL2 -framework OpenGL
 endif
 

@@ -1,10 +1,7 @@
 #pragma once
 
 #include "mapobject.hpp"
-#include "level.hpp"
 #include "camera.hpp"
-
-enum directionPlayer { NORD = 0, EST = 1, SUD = 2, OUEST = 3};
 
 class Player : public MapObject{
 private:
@@ -16,8 +13,9 @@ public:
   int getHealth();
 
   void takeDamage();
-  void playerMove(Level,Camera);
+  void playerChangeDir(Camera);
 
   glm::vec2 position;
+  glm::vec2 nextPos;
   int direction;
 };
