@@ -1,10 +1,10 @@
 #include "player.hpp"
 
-Player::Player(glm::vec2 pos, int dir) : MapObject (pos,dir,"player")
-{
+Player::Player(glm::vec2 pos, int dir) : Entity (pos,dir,"player") {
 	health = 3;
   position = pos;
   direction = dir;
+  nbMoves = 0;
 	id++;
 }
 
@@ -23,24 +23,28 @@ void Player::playerChangeDir(Camera camera){
   if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
     if (camera.currentState == 1){
       direction = NORD;
+      nbMoves++;
       return;
     }
   }
   else if (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S]){
     if(camera.currentState == 1){
       direction = SUD;
+      nbMoves++;
       return;
     }
   }
   else if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]){
     if(camera.currentState == 1){
       direction = OUEST;
+      nbMoves++;
       return;
     }
   }
   else if (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]){
     if(camera.currentState == 1){
       direction = EST;
+      nbMoves++;
       return;
     }
   }

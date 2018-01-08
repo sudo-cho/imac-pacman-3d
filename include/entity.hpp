@@ -4,11 +4,12 @@
 #include <glm/glm.hpp>
 #include <string>
 
+enum Direction { NORD = 0, EST = 1, SUD = 2, OUEST = 3};
 
-class MapObject {
+class Entity {
 public:
-	MapObject(glm::vec2,int,std::string);
-	~MapObject();
+	Entity(glm::vec2,int,std::string);
+	~Entity();
 	int id;
 	glm::vec2 position;
 	int direction;

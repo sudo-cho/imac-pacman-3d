@@ -43,6 +43,9 @@ Level::Level(string fileName){
 
 	readImageFile(imageFile);
 
+	for (int i = 0 ; i < 4 ; i++ ){
+		ghosts.push_back(Ghost(glm::vec2(10,10),0,i));
+	}
 }
 
 Level::~Level(){
@@ -136,4 +139,8 @@ void Level::moveObjects(Player *player){
   for(int i=0; i < (int)ghosts.size(); i++){
   	ghosts[i].move(player->position, player->direction, this->map);
   }
+  if (player->nbMoves == 5) ghosts[0].position = ghosts[1].beginPos;
+  //if (player->nbMoves == 15) ghosts[1].position = ghosts[1].beginPos;
+  if (player->nbMoves == 25) ghosts[2].position = ghosts[2].beginPos;
+  if (player->nbMoves == 30) ghosts[3].position = ghosts[3].beginPos;
 }

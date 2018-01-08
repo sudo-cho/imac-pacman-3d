@@ -304,9 +304,25 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
   pacman.drawPacman(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture);
 
+  // dessin Fantomes
+  std::vector<SphereDraw> ghosts;
+  for (int i = 0 ; i < (int)level.ghosts.size() ; i++){
+    Sphere sphere(0.5f, 16, 16);
+    SphereDraw ghost (&sphere);
+    ghosts.push_back(ghost);
+    ghost.ProjMatrix = pathWall.ProjMatrix;
+    int translateX = level.ghosts[i].position.x - (int)level.width/2;
+    int translateY = level.ghosts[i].position.y - (int)level.height/2;
+    MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
+    ghost.drawPacman(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture);
+  }
+
   pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.5f, glm::vec3(1,0,0));
   pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-12,0));
   pacman.ProjMatrix = pathWall.ProjMatrix;
+  for (int i = 0 ; i < (int)ghosts.size() ; i++){
+    ghosts[i].ProjMatrix = pathWall.ProjMatrix;
+  }
 
 }
 

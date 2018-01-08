@@ -1,9 +1,9 @@
 #pragma once
 
-#include "mapobject.hpp"
+#include "entity.hpp"
 #include "camera.hpp"
 
-class Player : public MapObject{
+class Player : public Entity{
 private:
   int health;
 
@@ -18,4 +18,5 @@ public:
   glm::vec2 position;
   glm::vec2 nextPos;
   int direction;
+  int nbMoves;
 };

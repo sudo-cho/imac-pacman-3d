@@ -1,10 +1,10 @@
-#include "mapobject.hpp"
+#include "entity.hpp"
 
 using namespace std;
 
 static int idObj = 0;
 
-MapObject::MapObject(glm::vec2 pos, int dir, string t){
+Entity::Entity(glm::vec2 pos, int dir, string t){
 	id = idObj;
 	idObj++;
 	position = pos;
@@ -12,6 +12,6 @@ MapObject::MapObject(glm::vec2 pos, int dir, string t){
 	type = t;
 }
 
-MapObject::~MapObject(){
+Entity::~Entity(){
 }
 
