@@ -43,7 +43,7 @@ Level::Level(string fileName){
 
 	readImageFile(imageFile);
 
-	for (int i = 0 ; i < 4 ; i++ ){
+	for (int i = 0 ; i < 7 ; i++ ){
 		ghosts.push_back(Ghost(glm::vec2(10,10),0,i));
 	}
 }
@@ -129,18 +129,26 @@ Case Level::getCaseFromPos(glm::vec2 pos){
 	return caseNull;
 }
 
+static int nbMoves = 0;
 
 void Level::moveObjects(Player *player){
-  if (player->direction == NORD && getCaseFromPos(glm::vec2(player->position.x, player->position.y -1)).type != 0) player->position.y -= 1;
-  else if (player->direction == SUD && getCaseFromPos(glm::vec2(player->position.x, player->position.y +1)).type != 0) player->position.y += 1;
-  else if (player->direction == OUEST && getCaseFromPos(glm::vec2(player->position.x -1, player->position.y)).type != 0) player->position.x -= 1;
-  else if (player->direction == EST && getCaseFromPos(glm::vec2(player->position.x +1, player->position.y)).type != 0) player->position.x += 1;
 
-  for(int i=0; i < (int)ghosts.size(); i++){
-  	ghosts[i].move(player->position, player->direction, this->map);
-  }
-  if (player->nbMoves == 5) ghosts[0].position = ghosts[1].beginPos;
-  //if (player->nbMoves == 15) ghosts[1].position = ghosts[1].beginPos;
-  if (player->nbMoves == 25) ghosts[2].position = ghosts[2].beginPos;
-  if (player->nbMoves == 30) ghosts[3].position = ghosts[3].beginPos;
+	nbMoves++;
+
+	if (player->direction == NORD && getCaseFromPos(glm::vec2(player->position.x, player->position.y -1)).type != 0) player->position.y -= 1;
+	else if (player->direction == SUD && getCaseFromPos(glm::vec2(player->position.x, player->position.y +1)).type != 0) player->position.y += 1;
+	else if (player->direction == OUEST && getCaseFromPos(glm::vec2(player->position.x -1, player->position.y)).type != 0) player->position.x -= 1;
+	else if (player->direction == EST && getCaseFromPos(glm::vec2(player->position.x +1, player->position.y)).type != 0) player->position.x += 1;
+
+	if (player->nbMoves == 5) ghosts[0].position = ghosts[1].beginPos;
+	if (player->nbMoves == 15) ghosts[5].position = ghosts[5].beginPos;
+	if (player->nbMoves == 25) ghosts[6].position = ghosts[6].beginPos;
+	if (player->nbMoves == 30) ghosts[3].position = ghosts[3].beginPos;
+
+	if (nbMoves % 2 == 0){
+		for(int i=0; i < (int)ghosts.size(); i++){
+			ghosts[i].move(player->position, player->direction, this->map, this->width);
+		}
+	}
+	
 }

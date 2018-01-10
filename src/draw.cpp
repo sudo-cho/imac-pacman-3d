@@ -84,6 +84,7 @@ SphereDraw::SphereDraw(Sphere * sphere){
   // Les matrices
   this->ProjMatrix = glm::perspective( glm::radians(70.f), 800.f / 600.f, 0.1f, 100.f);
   this->NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
+  this->MVPMatrix = ProjMatrix * MVMatrix ;
 
   glEnable(GL_DEPTH_TEST);
 
@@ -103,6 +104,8 @@ void SphereDraw::drawSphere(Sphere *sphere, GLuint locationMVPMatrix, GLuint loc
 }
 
 void SphereDraw::drawPacman(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture){
+  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   glBindVertexArray(this->vao);
 
   MVMatrix = MVMat;
@@ -110,16 +113,16 @@ void SphereDraw::drawPacman(Sphere *sphere, GLuint locationMVPMatrix, GLuint loc
   glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
   glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
+/*
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
   glActiveTexture(GL_TEXTURE0 + TEXUNIT);
-  glBindTexture(GL_TEXTURE_2D, this->texPacman);
+  glBindTexture(GL_TEXTURE_2D, this->texPacman);*/
 
   glDrawArrays(GL_TRIANGLES, 0, sphere->getVertexCount());
 
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glActiveTexture(GL_TEXTURE0);
+/*  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE0);*/
 
   glBindVertexArray(0);
 
@@ -296,7 +299,7 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   }
 
   // dessin Pacman
-  Sphere sphere(0.5f, 16, 16);
+  Sphere sphere(0.5f, 32, 16);
   SphereDraw pacman (&sphere);
   pacman.ProjMatrix = pathWall.ProjMatrix;
   int translateX = player.position.x - (int)level.width/2;
@@ -307,7 +310,7 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   // dessin Fantomes
   std::vector<SphereDraw> ghosts;
   for (int i = 0 ; i < (int)level.ghosts.size() ; i++){
-    Sphere sphere(0.5f, 16, 16);
+    Sphere sphere(0.5f, 32, 16);
     SphereDraw ghost (&sphere);
     ghosts.push_back(ghost);
     ghost.ProjMatrix = pathWall.ProjMatrix;

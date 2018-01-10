@@ -19,7 +19,7 @@
 #include "entity.hpp"
 #include "case.hpp"
 
-enum typeGhostEnum { Shadow = 0 , Speedy = 1 , Bashful = 2 , Pokey = 3 };
+enum typeGhostEnum { Shadow = 0 , Speedy = 5 , Bashful = 6 , Pokey = 3 };
 
 class Ghost : public Entity{
 public:
@@ -30,9 +30,9 @@ public:
 	glm::vec2 beginPos;
 	glm::vec2 lastPos;
 
-	void move (glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel);
+	void move (glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel, int widthLevel);
 	void shadowMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos);
-	void speedyMove(glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel);
+	void speedyMove(glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel, std::vector<glm::vec2> possiblePos, int widthLevel);
 	void bashfulMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos);
 	void pokeyMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos);
 
