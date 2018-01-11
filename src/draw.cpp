@@ -405,6 +405,20 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
       MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(1, 0, 0));
       pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
 
+      //dessin pacgums
+      if (level.map[i].ifPacgum == 1){
+        Sphere sphere(0.2f, 32, 16);
+        SphereDraw pacgum (&sphere);
+        pacgum.ProjMatrix = pathWall.ProjMatrix;
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacgumSphere, level.statePacman);
+      }
+      else if (level.map[i].ifPacgum == 2){
+        Sphere sphere(0.3f, 32, 16);
+        SphereDraw pacgum (&sphere);
+        pacgum.ProjMatrix = pathWall.ProjMatrix;
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SuperPacgumSphere, level.statePacman);
+      }
+
       // dessin murs
       if (level.map[i-1].type == 0){
         // direction nord
