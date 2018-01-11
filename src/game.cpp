@@ -6,9 +6,11 @@ Game::Game ()
   : level(Level((std::string)"assets/level1.dml"))
   , camera(Camera(glm::vec2(level.begin.position.x, level.begin.position.y), 0))
   , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 1))
+  , smenu(StartMenu(0, 1))
 {
   this->initWindow();
   this->initProgram();
+  this->initMenu();
 }
 
 Game::~Game () {
@@ -26,7 +28,7 @@ bool Game::initWindow () {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-  window = SDL_CreateWindow("PACIMAC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow("PACIMAC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
   if (window == NULL) {
     printf("Could not create window: %s\n", SDL_GetError());
   }
@@ -39,7 +41,7 @@ bool Game::initWindow () {
   }
 
   glEnable(GL_DEPTH_TEST);
-  // glEnable(GL_BLEND);
+  glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   std::cout << "GLEW " << glewGetString(GLEW_VERSION) << std::endl;
@@ -59,24 +61,29 @@ void Game::initProgram () {
 }
 
 void Game::render () {
-  if (!camera.cameraChange(level)) {
-    player.playerMove(level,camera);
-  }
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  if (camera.currentState == 0){
-    path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+  if (smenu.getMenuStatus() == 0) {
+    smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
   }
   else {
-    path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    if (!camera.cameraChange(level)) {
+      player.playerMove(level,camera);
+    }
+
+    if (camera.currentState == 0){
+      path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    }
+    else {
+      path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    }
   }
 
   SDL_Delay(1000/60);
   SDL_GL_SwapWindow(window);
 }
 
-// void Game::initMenu () {
-//   MenuDraw menuDraw;
-//   menuDraw.drawMenu();
-// }
+void Game::initMenu () {
+  smenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
+  smenu.initQuadMenu();
+}

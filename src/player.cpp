@@ -2,10 +2,10 @@
 
 Player::Player(glm::vec2 pos, int dir) : MapObject (pos,dir,"player")
 {
-	health = 3;
+  health = 3;
   position = pos;
   direction = dir;
-	id++;
+  id++;
 }
 
 void Player::takeDamage(){
@@ -19,7 +19,7 @@ int Player::getHealth(){
 
 void Player::playerMove(Level level, Camera camera){
   const Uint8 *state = SDL_GetKeyboardState(NULL);
-  
+
   if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
     if (camera.currentState == 0){
       if (direction == NORD){

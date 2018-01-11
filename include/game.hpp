@@ -34,12 +34,13 @@ class Game{
   Camera camera;
   Player player;
   PathDraw path;
+  StartMenu smenu;
 public:
   Game();
   ~Game();
 
   bool initWindow();
   void initProgram();
-  // void initMenu();
+  void initMenu();
   void render();
 };
