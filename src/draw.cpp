@@ -25,9 +25,13 @@ Vertex2DUV::Vertex2DUV(float x, float y, float u, float v)
 
 GLuint SphereDraw::texPacman(0);
 GLuint SphereDraw::texShadow(0);
+GLuint SphereDraw::texShadowHunted(0);
 GLuint SphereDraw::texSpeedy(0);
+GLuint SphereDraw::texSpeedyHunted(0);
 GLuint SphereDraw::texBashful(0);
+GLuint SphereDraw::texBashfulHunted(0);
 GLuint SphereDraw::texPokey(0);
+GLuint SphereDraw::texPokeyHunted(0);
 GLuint SphereDraw::texPacgum(0);
 GLuint SphereDraw::texSuperPacgum(0);
 size_t SphereDraw::refcount(0);
@@ -37,9 +41,13 @@ SphereDraw::SphereDraw(Sphere * sphere){
   if(!refcount){
     texPacman = texFromFile("assets/textures/pacman.png");
     texShadow = texFromFile("assets/textures/blinky.png");
+    texShadowHunted = texFromFile("assets/textures/blinky2.png");
     texSpeedy = texFromFile("assets/textures/pinky.png");
+    texSpeedyHunted = texFromFile("assets/textures/pinky2.png");
     texBashful = texFromFile("assets/textures/inky.png");
+    texBashfulHunted = texFromFile("assets/textures/inky2.png");
     texPokey = texFromFile("assets/textures/clyde.png");
+    texPokeyHunted = texFromFile("assets/textures/clyde2.png");
     texPacgum = texFromFile("assets/textures/pacgum.png");
     texSuperPacgum = texFromFile("assets/textures/supergum.png");
   }
@@ -115,7 +123,7 @@ void SphereDraw::drawSphere(Sphere *sphere, GLuint locationMVPMatrix, GLuint loc
 
 }
 
-void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, int typeObject){
+void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, int typeObject, int gameState){
 
   glBindVertexArray(this->vao);
 
@@ -129,7 +137,9 @@ void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLu
   glUniform1i(uTexture, TEXUNIT);
   glActiveTexture(GL_TEXTURE0 + TEXUNIT);
   if (typeObject == 0){ glBindTexture(GL_TEXTURE_2D, this->texPacman); }
-  else if (typeObject == 1){ glBindTexture(GL_TEXTURE_2D, this->texShadow); }
+  else if (typeObject == 1){ 
+    if (glBindTexture(GL_TEXTURE_2D, this->texShadow); 
+  }
   else if (typeObject == 2){ glBindTexture(GL_TEXTURE_2D, this->texSpeedy); }
   else if (typeObject == 3){ glBindTexture(GL_TEXTURE_2D, this->texBashful); }
   else if (typeObject == 4){ glBindTexture(GL_TEXTURE_2D, this->texPokey); }
@@ -318,14 +328,14 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
         SphereDraw pacgum (&sphere);
         pacgum.ProjMatrix = pathWall.ProjMatrix;
         MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacgumSphere);
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacgumSphere, level.statePacman);
       }
       else if (level.map[i].ifPacgum == 2){
         Sphere sphere(0.3f, 32, 16);
         SphereDraw pacgum (&sphere);
         pacgum.ProjMatrix = pathWall.ProjMatrix;
         MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SuperPacgumSphere);
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SuperPacgumSphere, level.statePacman);
       }
 
     }
@@ -338,7 +348,7 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   int translateX = player.position.x - (int)level.width/2;
   int translateY = player.position.y - (int)level.height/2;
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  pacman.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacmanSphere);
+  pacman.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacmanSphere, level.statePacman);
 
   // dessin Fantomes
   SphereDraw ghostShadow (&sphere);
@@ -346,28 +356,28 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   translateX = level.shadow.position.x - (int)level.width/2;
   translateY = level.shadow.position.y - (int)level.height/2;  
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, ShadowSphere);
+  ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, ShadowSphere, level.statePacman);
 
   SphereDraw ghostSpeedy (&sphere);
   ghostSpeedy.ProjMatrix = pathWall.ProjMatrix;
   translateX = level.speedy.position.x - (int)level.width/2;
   translateY = level.speedy.position.y - (int)level.height/2;  
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SpeedySphere);
+  ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SpeedySphere, level.statePacman);
 
   SphereDraw ghostBashful (&sphere);
   ghostBashful.ProjMatrix = pathWall.ProjMatrix;
   translateX = level.bashful.position.x - (int)level.width/2;
   translateY = level.bashful.position.y - (int)level.height/2;  
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, BashfulSphere);
+  ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, BashfulSphere, level.statePacman);
 
   SphereDraw ghostPokey (&sphere);
   ghostPokey.ProjMatrix = pathWall.ProjMatrix;
   translateX = level.pokey.position.x - (int)level.width/2;
   translateY = level.pokey.position.y - (int)level.height/2;  
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PokeySphere);
+  ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PokeySphere, level.statePacman);
 
   pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.5f, glm::vec3(1,0,0));
   pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-12,0));

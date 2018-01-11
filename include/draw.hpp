@@ -32,9 +32,13 @@ public:
   glm::mat4 ProjMatrix, MVPMatrix, MVMatrix, NormalMatrix;
   static GLuint texPacman;
   static GLuint texShadow;
+  static GLuint texShadowHunted;
   static GLuint texSpeedy;
+  static GLuint texSpeedyHunted;
   static GLuint texBashful;
+  static GLuint texBashfulHunted;
   static GLuint texPokey;
+  static GLuint texPokeyHunted;
   static GLuint texPacgum;
   static GLuint texSuperPacgum;
   static size_t refcount;
@@ -43,7 +47,7 @@ public:
   ~SphereDraw();
 
   void drawSphere(Sphere*, GLuint, GLuint, GLuint);
-  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int);
+  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int, int);
 };
 
 class WallDraw{

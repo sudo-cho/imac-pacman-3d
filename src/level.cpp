@@ -213,7 +213,7 @@ void Level::moveObjects(Player *player){
 	if (bashful.comparePos(bashful.position,player->position)) { playerContact(player,bashful); }
 	if (pokey.comparePos(pokey.position,player->position)) { playerContact(player,pokey); }
 	
-	if (statePacman == 1){
+	if (statePacman == pacmanAttack){
 		superGumTimer++;
 	}
 }
