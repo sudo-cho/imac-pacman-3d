@@ -17,6 +17,8 @@ public:
 
   glm::vec2 position;
   glm::vec2 nextPos;
+  glm::vec2 beginPos;
   int direction;
   int nbMoves;
+  int score;
 };

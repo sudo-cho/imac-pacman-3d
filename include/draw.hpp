@@ -24,18 +24,26 @@ struct Vertex2DUV{
   Vertex2DUV(float x, float y, float u, float v);
 };
 
+enum typeObjectSphere { PacmanSphere = 0 , ShadowSphere = 1 , SpeedySphere = 2 , BashfulSphere = 3 , PokeySphere = 4 ,  PacgumSphere = 5 , SuperPacgumSphere = 6};
+
 class SphereDraw{
 public:
   GLuint vbo, vao;
   glm::mat4 ProjMatrix, MVPMatrix, MVMatrix, NormalMatrix;
   static GLuint texPacman;
+  static GLuint texShadow;
+  static GLuint texSpeedy;
+  static GLuint texBashful;
+  static GLuint texPokey;
+  static GLuint texPacgum;
+  static GLuint texSuperPacgum;
   static size_t refcount;
 
   SphereDraw(Sphere*);
   ~SphereDraw();
 
   void drawSphere(Sphere*, GLuint, GLuint, GLuint);
-  void drawPacman(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint);
+  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int);
 };
 
 class WallDraw{

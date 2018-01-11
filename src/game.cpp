@@ -5,7 +5,7 @@ using namespace glimac;
 Game::Game ()
   : level(Level((std::string)"assets/level1.dml"))
   , camera(Camera(1))
-  , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 1))
+  , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 3))
 {
   this->initWindow();
   this->initProgram();
@@ -26,7 +26,7 @@ bool Game::initWindow () {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-  window = SDL_CreateWindow("PACIMAC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1080, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
+  window = SDL_CreateWindow("PACIMAC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
   if (window == NULL) {
     printf("Could not create window: %s\n", SDL_GetError());
   }
@@ -39,7 +39,7 @@ bool Game::initWindow () {
   }
 
   glEnable(GL_DEPTH_TEST);
-  // glEnable(GL_BLEND);
+  glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   std::cout << "GLEW " << glewGetString(GLEW_VERSION) << std::endl;

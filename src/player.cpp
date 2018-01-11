@@ -5,6 +5,8 @@ Player::Player(glm::vec2 pos, int dir) : Entity (pos,dir,"player") {
   position = pos;
   direction = dir;
   nbMoves = 0;
+  score = 0;
+  beginPos = pos;
 	id++;
 }
 
@@ -28,128 +30,45 @@ void Player::playerChangeDir(Camera camera){
     }
   }
   else if (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S]){
-    if(camera.currentState == 1){
+    if (camera.currentState == 1){
       direction = SUD;
       nbMoves++;
       return;
     }
+    else {
+      if (direction == NORD) { direction = SUD; }
+      else if (direction == SUD) { direction = NORD; }
+      else if (direction == OUEST) { direction = EST; }
+      else if (direction == EST) { direction = OUEST; }
+      nbMoves++;
+    }
   }
   else if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]){
-    if(camera.currentState == 1){
+    if (camera.currentState == 1){
       direction = OUEST;
       nbMoves++;
       return;
     }
+    else {
+      if (direction == NORD) { direction = OUEST; }
+      else if (direction == SUD) { direction = EST; }
+      else if (direction == OUEST) { direction = SUD; }
+      else if (direction == EST) { direction = NORD; }
+      nbMoves++;
+    }
   }
   else if (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]){
-    if(camera.currentState == 1){
+    if (camera.currentState == 1){
       direction = EST;
       nbMoves++;
       return;
     }
-  }
-  /*
-  if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
-    if (camera.currentState == 0){
-      if (direction == NORD){
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y -1)).type != 0) nextPos = glm::vec2(position.x, position.y-1);
-      }
-      else if (direction == EST) {
-        if (level.getCaseFromPos(glm::vec2(position.x +1, position.y)).type != 0) nextPos = glm::vec2(position.x+1, position.y);
-      }
-      else if (direction == SUD) {
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y +1)).type != 0) nextPos = glm::vec2(position.x, position.y+1);
-      }
-      else if (direction == OUEST) {
-        if (level.getCaseFromPos(glm::vec2(position.x -1, position.y)).type != 0) nextPos = glm::vec2(position.x-1, position.y);
-      }
-    }
     else {
-      if (level.getCaseFromPos(glm::vec2(position.x, position.y -1)).type != 0) nextPos = glm::vec2(position.x, position.y-1);
-      direction = NORD;
+      if (direction == NORD) { direction = EST; }
+      else if (direction == SUD) { direction = OUEST; }
+      else if (direction == OUEST) { direction = NORD; }
+      else if (direction == EST) { direction = SUD; }
+      nbMoves++;
     }
   }
-  else if (state[SDL_SCANCODE_DOWN] || state[SDL_SCANCODE_S]){
-    if(camera.currentState == 0){
-      if (direction == NORD){
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y +1)).type != 0) position.y += 1;
-      }
-      else if (direction == EST) {
-        if (level.getCaseFromPos(glm::vec2(position.x -1, position.y)).type != 0) position.x -= 1;
-      }
-      else if (direction == SUD) {
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y -1)).type != 0) position.y -= 1;
-      }
-      else if (direction == OUEST) {
-        if (level.getCaseFromPos(glm::vec2(position.x +1, position.y)).type != 0) position.x += 1;
-      }
-      SDL_Delay(150);
-    }
-    else {
-      if (level.getCaseFromPos(glm::vec2(position.x, position.y +1)).type != 0) position.y += 1;
-      direction = SUD;
-      SDL_Delay(100);
-    }
-  }
-  else if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]){
-    if(camera.currentState == 0){
-      if (direction == NORD){
-        if (level.getCaseFromPos(glm::vec2(position.x -1, position.y)).type != 0) position.x -= 1;
-      }
-      else if (direction == EST) {
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y -1)).type != 0) position.y -= 1;
-      }
-      else if (direction == SUD) {
-        if (level.getCaseFromPos(glm::vec2(position.x +1, position.y)).type != 0) position.x += 1;
-      }
-      else if (direction == OUEST) {
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y +1)).type != 0) position.y += 1;
-      }
-      SDL_Delay(150);
-    }
-    else {
-      if (level.getCaseFromPos(glm::vec2(position.x -1, position.y)).type != 0) position.x -= 1;
-      direction = OUEST;
-      SDL_Delay(100);
-    }
-  }
-  else if (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]){
-    if(camera.currentState == 0){
-      if (direction == NORD){
-        if (level.getCaseFromPos(glm::vec2(position.x +1, position.y)).type != 0) position.x += 1;
-      }
-      else if (direction == EST) {
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y +1)).type != 0) position.y += 1;
-      }
-      else if (direction == SUD) {
-        if (level.getCaseFromPos(glm::vec2(position.x -1, position.y)).type != 0) position.x -= 1;
-      }
-      else if (direction == OUEST) {
-        if (level.getCaseFromPos(glm::vec2(position.x, position.y -1)).type != 0) position.y -= 1;
-      }
-      SDL_Delay(150);
-    }
-    else {
-      if (level.getCaseFromPos(glm::vec2(position.x +1, position.y)).type != 0) position.x += 1;
-      direction = EST;
-      SDL_Delay(100);
-    }
-  }
-  // CLAVIER TOUCHE A
-  else if (state[SDL_SCANCODE_Q]){
-    if (camera.currentState == 0){
-      if (direction == 0) direction = 3;
-      else direction--;
-      SDL_Delay(150);
-    }
-  }
-  // CLAVIER TOUCHE E
-  else if (state[SDL_SCANCODE_E]){
-    if (camera.currentState == 0){
-      if (direction == 3) direction = 0;
-      else direction++;
-      SDL_Delay(150);
-    }
-  }
-  */
 }

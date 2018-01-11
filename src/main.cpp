@@ -25,7 +25,6 @@ int CALLBACK WinMain(
       if(e.type == SDL_QUIT) {
         _continue = false;
       }
-      //game.render();
     }
   }
   return 0;

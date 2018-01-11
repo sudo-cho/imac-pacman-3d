@@ -2,6 +2,10 @@
 
 using namespace std;
 
+Ghost::Ghost(){
+
+}
+
 Ghost::Ghost(glm::vec2 pos, int dir, int type)  : Entity (pos,dir,"ghost") {
 	position = pos;
 	typeGhost = type;
@@ -46,8 +50,39 @@ void Ghost::move(glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel,
 	
 }
 
+void Ghost::moveAway(glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel){
+
+	std::vector<glm::vec2> possiblePositions;
+	glm::vec2 posNorth = glm::vec2(position.x, position.y -1);
+	glm::vec2 posSouth = glm::vec2(position.x, position.y +1);
+	glm::vec2 posEast = glm::vec2(position.x +1, position.y);
+	glm::vec2 posWest = glm::vec2(position.x -1, position.y);
+
+	if (getCaseFromMap(mapLevel,posNorth).type != 0) possiblePositions.push_back(posNorth);
+	if (getCaseFromMap(mapLevel,posSouth).type != 0) possiblePositions.push_back(posSouth);
+	if (getCaseFromMap(mapLevel,posEast).type != 0) possiblePositions.push_back(posEast);
+	if (getCaseFromMap(mapLevel,posWest).type != 0) possiblePositions.push_back(posWest);
+
+	if (possiblePositions.size() == 1){
+		lastPos = glm::vec2(position.x,position.y);
+		position.x = possiblePositions[0].x;
+		position.y = possiblePositions[0].y;
+	}
+
+	glm::vec2 bestPos = possiblePositions[0];
+	for (int i = 1 ; i < (int)possiblePositions.size() ; i++){
+		if (pow((possiblePositions[i].x - posPlayer.x),2) + pow((possiblePositions[i].y - posPlayer.y),2) > pow((bestPos.x - posPlayer.x),2) + pow((bestPos.y - posPlayer.y),2)){
+			bestPos = possiblePositions[i];
+		}
+	}
+	lastPos = glm::vec2(position.x,position.y);
+	position.x = bestPos.x;
+	position.y = bestPos.y;
+	
+}
+
 void Ghost::shadowMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos){
-	if (possiblePos.size() == 0) possiblePos.push_back(lastPos);
+	possiblePos.push_back(lastPos);
 	glm::vec2 bestPos = possiblePos[0];
 	for (int i = 1 ; i < (int)possiblePos.size() ; i++){
 		if (pow((possiblePos[i].x - posPlayer.x),2) + pow((possiblePos[i].y - posPlayer.y),2) < pow((bestPos.x - posPlayer.x),2) + pow((bestPos.y - posPlayer.y),2)){
@@ -60,7 +95,7 @@ void Ghost::shadowMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos){
 }
 
 void Ghost::speedyMove(glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel, std::vector<glm::vec2> possiblePos, int widthLevel){
-	if (possiblePos.size() == 0) possiblePos.push_back(lastPos);
+	possiblePos.push_back(lastPos);
 	glm::vec2 playerAimingPos = posPlayer;
 	int casePlayer;
 	for (int i = 0 ; i < (int)mapLevel.size() ; i++){
@@ -120,7 +155,7 @@ void Ghost::speedyMove(glm::vec2 posPlayer, int dirPlayer, std::vector<Case> map
 }
 
 void Ghost::bashfulMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos){
-	if (possiblePos.size() == 0) possiblePos.push_back(lastPos);
+	possiblePos.push_back(lastPos);
 	glm::vec2 bestPos = possiblePos[0];
 	for (int i = 1 ; i < (int)possiblePos.size() ; i++){
 		if (pow((possiblePos[i].x - posPlayer.x) + (possiblePos[i].y - posPlayer.y),2) < pow((bestPos.x - posPlayer.x) + (bestPos.y - posPlayer.y),2)){
@@ -133,7 +168,7 @@ void Ghost::bashfulMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos)
 }
 
 void Ghost::pokeyMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos){
-	if (possiblePos.size() == 0) possiblePos.push_back(lastPos);
+	possiblePos.push_back(lastPos);
 	glm::vec2 bestPos = possiblePos[rand() % (int)possiblePos.size()];
 	lastPos = glm::vec2(position.x,position.y);
 	position.x = bestPos.x;
@@ -141,7 +176,8 @@ void Ghost::pokeyMove(glm::vec2 posPlayer, std::vector<glm::vec2> possiblePos){
 }
 
 void Ghost::die(){
-
+	position = glm::vec2(10,10);
+	lastPos = glm::vec2(10,10);
 }
 
 glm::vec2 Ghost::getPos(){

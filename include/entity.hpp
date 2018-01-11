@@ -8,6 +8,7 @@ enum Direction { NORD = 0, EST = 1, SUD = 2, OUEST = 3};
 
 class Entity {
 public:
+	Entity();
 	Entity(glm::vec2,int,std::string);
 	~Entity();
 	int id;
