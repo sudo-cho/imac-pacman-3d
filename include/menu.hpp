@@ -1,7 +1,6 @@
 #pragma once
 
 #include <button.hpp>
-#include <draw.hpp>
 
 class Menu {
   std::vector<Button> buttons;
@@ -15,7 +14,7 @@ public:
   ~Menu();
 
   void drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture);
-  void initQuadMenu();
+  void initQuadMenu(std::string text[]);
   GLuint setTexture(const GLuint path);
   int getMenuStatus();
 };

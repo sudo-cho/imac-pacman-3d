@@ -1,5 +1,10 @@
 #include <button.hpp>
 
+struct Vertex2DUV{
+  glm::vec2 position, texcoords;
+  Vertex2DUV(float x, float y, float u, float v);
+};
+
 Button::Button (std::string t_text, GLuint t_tex)
   : text(t_text), tex(t_tex)
 {

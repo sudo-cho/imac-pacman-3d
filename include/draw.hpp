@@ -16,6 +16,7 @@
 #include "level.hpp"
 #include "camera.hpp"
 #include "player.hpp"
+#include "texture.hpp"
 
 using namespace glimac;
 

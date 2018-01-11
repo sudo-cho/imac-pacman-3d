@@ -1,13 +1,13 @@
 #include "player.hpp"
 
 Player::Player(glm::vec2 pos, int dir) : Entity (pos,dir,"player") {
-	health = 3;
+  health = 3;
   position = pos;
   direction = dir;
   nbMoves = 0;
   score = 0;
   beginPos = pos;
-	id++;
+  id++;
 
 }
 
@@ -20,8 +20,18 @@ int Player::getHealth(){
 }
 
 
-void Player::playerChangeDir(Camera camera){
+void Player::playerChangeDir(Camera &camera, MainMenu &menu){
   const Uint8 *state = SDL_GetKeyboardState(NULL);
+
+  if (state[SDL_SCANCODE_ESCAPE]){
+    if( menu.getMainMenuStatus() == 0) {
+      menu.setMainMenuStatus(1);
+    }
+    else {
+      menu.setMainMenuStatus(0);
+    }
+    return;
+  }
 
   if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
     if (camera.currentState == 1){

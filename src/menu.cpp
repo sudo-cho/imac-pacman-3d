@@ -1,5 +1,10 @@
 #include <menu.hpp>
 
+struct Vertex2DUV{
+  glm::vec2 position, texcoords;
+  Vertex2DUV(float x, float y, float u, float v);
+};
+
 Menu::Menu (GLuint t_tex, int t_nbButtons)
   : tex(t_tex), nbButtons(t_nbButtons)
 {}
@@ -39,7 +44,7 @@ void Menu::drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint l
   }
 }
 
-void Menu::initQuadMenu () {
+void Menu::initQuadMenu (std::string text[]) {
   glGenBuffers(1, &this->vbo);
   glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 
@@ -72,7 +77,7 @@ void Menu::initQuadMenu () {
 
   // init buttons
   for (int i = 0; i < nbButtons; i++) {
-    buttons.push_back(Button("bonjour", texFromFile("assets/textures/menu/button.png")));
+    buttons.push_back(Button(text[i], texFromFile("assets/textures/menu/button.png")));
   }
 
 }

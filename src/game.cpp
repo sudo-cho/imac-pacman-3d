@@ -7,6 +7,7 @@ Game::Game ()
   , camera(Camera(1))
   , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 3))
   , smenu(StartMenu(0, 1))
+  , mmenu(MainMenu(0, 2))
 {
   this->initWindow();
   this->initProgram();
@@ -66,17 +67,22 @@ void Game::render () {
     smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
   }
   else {
-    if (!camera.cameraChange()) {
-      player.playerChangeDir(camera);
-      level.moveObjects(&player);
-      // SDL_Delay(100);
-    }
-
-    if (camera.currentState == 0){
-      path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    if(mmenu.getMainMenuStatus() == 1) {
+      mmenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
     }
     else {
-      path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+      if (!camera.cameraChange()) {
+        player.playerChangeDir(camera, mmenu);
+        level.moveObjects(&player);
+        // SDL_Delay(100);
+      }
+
+      if (camera.currentState == 0){
+        path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+      }
+      else {
+        path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+      }
     }
   }
 
@@ -86,5 +92,9 @@ void Game::render () {
 
 void Game::initMenu () {
   smenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
-  smenu.initQuadMenu();
+  std::string texts[1] = {"commencer"};
+  smenu.initQuadMenu(texts);
+  mmenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
+  std::string textsMain[2] = {"reprendre", "quitter"};
+  mmenu.initQuadMenu(textsMain);
 }
