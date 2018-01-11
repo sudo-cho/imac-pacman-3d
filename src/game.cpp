@@ -6,9 +6,11 @@ Game::Game ()
   : level(Level((std::string)"assets/level1.dml"))
   , camera(Camera(1))
   , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 3))
+  , smenu(StartMenu(0, 1))
 {
   this->initWindow();
   this->initProgram();
+  this->initMenu();
 }
 
 Game::~Game () {
@@ -64,15 +66,30 @@ void Game::render () {
     SDL_Delay(100);
   }
 
+void Game::render () {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  if (camera.currentState == 0){
-    path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+  if (smenu.getMenuStatus() == 0) {
+    smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
   }
   else {
-    path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    if (!camera.cameraChange(level)) {
+      player.playerMove(level,camera);
+    }
+
+    if (camera.currentState == 0){
+      path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    }
+    else {
+      path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+    }
   }
 
   SDL_Delay(1000/60);
   SDL_GL_SwapWindow(window);
+}
+
+void Game::initMenu () {
+  smenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
+  smenu.initQuadMenu();
 }

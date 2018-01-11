@@ -8,6 +8,7 @@ Player::Player(glm::vec2 pos, int dir) : Entity (pos,dir,"player") {
   score = 0;
   beginPos = pos;
 	id++;
+
 }
 
 void Player::takeDamage(){
@@ -21,7 +22,7 @@ int Player::getHealth(){
 
 void Player::playerChangeDir(Camera camera){
   const Uint8 *state = SDL_GetKeyboardState(NULL);
-  
+
   if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
     if (camera.currentState == 1){
       direction = NORD;

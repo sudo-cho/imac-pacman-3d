@@ -20,6 +20,7 @@
 #include "draw.hpp"
 #include "player.hpp"
 #include "camera.hpp"
+#include <startMenu.hpp>
 
 using namespace glimac;
 
@@ -32,11 +33,13 @@ class Game{
   Camera camera;
   Player player;
   PathDraw path;
+  StartMenu smenu;
 public:
   Game();
   ~Game();
 
   bool initWindow();
   void initProgram();
+  void initMenu();
   void render();
 };
