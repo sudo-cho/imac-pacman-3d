@@ -74,7 +74,7 @@ void Game::render () {
       if (!camera.cameraChange()) {
         player.playerChangeDir(camera, mmenu);
         level.moveObjects(&player);
-        // SDL_Delay(100);
+        SDL_Delay(50);
       }
 
       if (camera.currentState == 0){

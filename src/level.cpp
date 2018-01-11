@@ -136,6 +136,10 @@ int Level::getMapValueCase(glm::vec2 pos){
 }
 
 static int nbMoves = 0;
+static int shadowMoves = 0;
+static int speedyMoves = 0;
+static int bashfulMoves = 0;
+static int pokeyMoves = 0;
 
 void Level::moveObjects(Player *player){
 

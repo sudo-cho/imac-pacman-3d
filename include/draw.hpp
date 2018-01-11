@@ -36,6 +36,7 @@ public:
   static GLuint texSpeedy;
   static GLuint texBashful;
   static GLuint texPokey;
+  static GLuint texGhostHunted;
   static GLuint texPacgum;
   static GLuint texSuperPacgum;
   static size_t refcount;
@@ -44,7 +45,7 @@ public:
   ~SphereDraw();
 
   void drawSphere(Sphere*, GLuint, GLuint, GLuint);
-  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int);
+  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int, int);
 };
 
 class WallDraw{

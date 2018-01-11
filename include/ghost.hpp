@@ -30,6 +30,7 @@ public:
 	int typeGhost;
 	glm::vec2 beginPos;
 	glm::vec2 lastPos;
+	int nbMove;
 
 	void move (glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel, int widthLevel);
 	void moveAway (glm::vec2 posPlayer, int dirPlayer, std::vector<Case> mapLevel);
