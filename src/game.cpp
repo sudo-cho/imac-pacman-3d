@@ -60,21 +60,16 @@ void Game::initProgram () {
   uTexture = glGetUniformLocation(program.getGLId(), "uTexture");
 }
 void Game::render () {
-  if (!camera.cameraChange()) {
-    player.playerChangeDir(camera);
-    level.moveObjects(&player);
-    SDL_Delay(100);
-  }
-
-void Game::render () {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   if (smenu.getMenuStatus() == 0) {
     smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
   }
   else {
-    if (!camera.cameraChange(level)) {
-      player.playerMove(level,camera);
+    if (!camera.cameraChange()) {
+      player.playerChangeDir(camera);
+      level.moveObjects(&player);
+      // SDL_Delay(100);
     }
 
     if (camera.currentState == 0){
