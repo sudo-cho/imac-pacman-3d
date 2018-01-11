@@ -136,15 +136,24 @@ int Level::getMapValueCase(glm::vec2 pos){
 }
 
 static int nbMoves = 0;
+static int shadowMoves = 0;
+static int speedyMoves = 0;
+static int bashfulMoves = 0;
+static int pokeyMoves = 0;
 
 void Level::moveObjects(Player *player){
 
-	if (superGumTimer == 20){
+	if (superGumTimer == 70){
 		statePacman = 0;
 		superGumTimer = 0;
+		glClearColor(0,0,0,1);
 	}
 
 	nbMoves++;
+	shadowMoves++;
+	speedyMoves++;
+	bashfulMoves++;
+	pokeyMoves++;
 
 	if (player->direction == NORD && getCaseFromPos(glm::vec2(player->position.x, player->position.y -1)).type != 0) player->position.y -= 1;
 	else if (player->direction == SUD && getCaseFromPos(glm::vec2(player->position.x, player->position.y +1)).type != 0) player->position.y += 1;
@@ -169,6 +178,7 @@ void Level::moveObjects(Player *player){
 		map[getMapValueCase(glm::vec2(player->position.x, player->position.y))].ifPacgum = 0;
 		statePacman = pacmanAttack;
 		superGumTimer = 0;
+		glClearColor(0.6f,0,0,1);
 	}
 
 	if (shadow.comparePos(shadow.position,player->position)) { playerContact(player,shadow); }
@@ -176,19 +186,19 @@ void Level::moveObjects(Player *player){
 	if (bashful.comparePos(bashful.position,player->position)) { playerContact(player,bashful); }
 	if (pokey.comparePos(pokey.position,player->position)) { playerContact(player,pokey); }
 
-	if (player->nbMoves == 5) {
+	if (shadowMoves == 25) {
 		shadow.position = shadow.beginPos;
 		shadow.lastPos = shadow.beginPos;
 	}
-	if (player->nbMoves == 15) {
+	if (speedyMoves == 50) {
 		speedy.position = speedy.beginPos;
 		speedy.lastPos = speedy.beginPos;
 	}
-	if (player->nbMoves == 25) {
+	if (bashfulMoves == 75) {
 		bashful.position = bashful.beginPos;
 		bashful.lastPos = bashful.beginPos;
 	}
-	if (player->nbMoves == 30) {
+	if (pokeyMoves == 100) {
 		pokey.position = pokey.beginPos;
 		pokey.lastPos = pokey.beginPos;
 	}
@@ -232,10 +242,32 @@ void Level::playerContact(Player *player, Ghost ghost){
 		bashful.lastPos = glm::vec2(10,10);
 		pokey.position = glm::vec2(10,10);
 		pokey.lastPos = glm::vec2(10,10);
+		shadowMoves = 0;
+		speedyMoves = 0;
+		bashfulMoves = 0;
+		pokeyMoves = 0;
 	}
 	else {
 		player->score += 200;
-		ghost.position = glm::vec2(10,10);
-		ghost.lastPos = glm::vec2(10,10);
+		if (ghost.typeGhost == Shadow) {
+			shadow.position = glm::vec2(10,10);
+			shadow.lastPos = glm::vec2(10,10);
+			shadowMoves = 0;
+		}
+		else if (ghost.typeGhost == Speedy) {
+			speedy.position = glm::vec2(10,10);
+			speedy.lastPos = glm::vec2(10,10);
+			speedyMoves = 0;
+		}
+		else if (ghost.typeGhost == Bashful) {
+			bashful.position = glm::vec2(10,10);
+			bashful.lastPos = glm::vec2(10,10);
+			bashfulMoves = 0;
+		}
+		else if (ghost.typeGhost == Pokey) {
+			pokey.position = glm::vec2(10,10);
+			pokey.lastPos = glm::vec2(10,10);
+			pokeyMoves = 0;
+		}
 	}
 }

@@ -24,13 +24,10 @@ Vertex2DUV::Vertex2DUV(float x, float y, float u, float v)
 
 GLuint SphereDraw::texPacman(0);
 GLuint SphereDraw::texShadow(0);
-GLuint SphereDraw::texShadowHunted(0);
 GLuint SphereDraw::texSpeedy(0);
-GLuint SphereDraw::texSpeedyHunted(0);
 GLuint SphereDraw::texBashful(0);
-GLuint SphereDraw::texBashfulHunted(0);
 GLuint SphereDraw::texPokey(0);
-GLuint SphereDraw::texPokeyHunted(0);
+GLuint SphereDraw::texGhostHunted(0);
 GLuint SphereDraw::texPacgum(0);
 GLuint SphereDraw::texSuperPacgum(0);
 size_t SphereDraw::refcount(0);
@@ -40,13 +37,10 @@ SphereDraw::SphereDraw(Sphere * sphere){
   if(!refcount){
     texPacman = texFromFile("assets/textures/pacman.png");
     texShadow = texFromFile("assets/textures/blinky.png");
-    texShadowHunted = texFromFile("assets/textures/blinky2.png");
     texSpeedy = texFromFile("assets/textures/pinky.png");
-    texSpeedyHunted = texFromFile("assets/textures/pinky2.png");
     texBashful = texFromFile("assets/textures/inky.png");
-    texBashfulHunted = texFromFile("assets/textures/inky2.png");
     texPokey = texFromFile("assets/textures/clyde.png");
-    texPokeyHunted = texFromFile("assets/textures/clyde2.png");
+    texGhostHunted = texFromFile("assets/textures/ghosthunted.png");
     texPacgum = texFromFile("assets/textures/pacgum.png");
     texSuperPacgum = texFromFile("assets/textures/supergum.png");
   }
@@ -135,13 +129,24 @@ void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLu
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
   glActiveTexture(GL_TEXTURE0 + TEXUNIT);
-  if (typeObject == 0){ glBindTexture(GL_TEXTURE_2D, this->texPacman); }
-  else if (typeObject == 1){ 
-    if (glBindTexture(GL_TEXTURE_2D, this->texShadow); 
+  if (gameState == 0){
+    if (typeObject == 1) {
+      glBindTexture(GL_TEXTURE_2D, this->texShadow);
+    }
+    else if (typeObject == 2) {
+      glBindTexture(GL_TEXTURE_2D, this->texSpeedy);
+    }
+    else if (typeObject == 3){
+      glBindTexture(GL_TEXTURE_2D, this->texBashful);
+    }
+    else if (typeObject == 4){
+      glBindTexture(GL_TEXTURE_2D, this->texPokey);
+    }
   }
-  else if (typeObject == 2){ glBindTexture(GL_TEXTURE_2D, this->texSpeedy); }
-  else if (typeObject == 3){ glBindTexture(GL_TEXTURE_2D, this->texBashful); }
-  else if (typeObject == 4){ glBindTexture(GL_TEXTURE_2D, this->texPokey); }
+  else {
+    glBindTexture(GL_TEXTURE_2D, this->texGhostHunted);
+  }
+  if (typeObject == 0){ glBindTexture(GL_TEXTURE_2D, this->texPacman); }
   else if (typeObject == 5){ glBindTexture(GL_TEXTURE_2D, this->texPacgum); }
   else if (typeObject == 6){ glBindTexture(GL_TEXTURE_2D, this->texSuperPacgum); }
 
@@ -284,8 +289,8 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   glm::mat4 MVMat = glm::mat4(1.f);
   static WallDraw pathWall;
 
-  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,12,0));
-  pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, -0.5f, glm::vec3(1,0,0));
+  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,9,0));
+  pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, -0.4f, glm::vec3(1,0,0));
 
   for (int i=0 ; i<(int)level.map.size() ; i++){
     if (level.map[i].type != 0){
@@ -378,8 +383,8 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
   ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PokeySphere, level.statePacman);
 
-  pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.5f, glm::vec3(1,0,0));
-  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-12,0));
+  pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.4f, glm::vec3(1,0,0));
+  pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-9,0));
   pacman.ProjMatrix = pathWall.ProjMatrix;
 
   ghostShadow.ProjMatrix = pathWall.ProjMatrix;
