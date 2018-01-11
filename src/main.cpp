@@ -5,12 +5,7 @@ using namespace glimac;
 
 #ifdef _WIN32
 #include <windows.h>
-int CALLBACK WinMain(
-                     _In_ HINSTANCE hInstance,
-                     _In_ HINSTANCE hPrevInstance,
-                     _In_ LPSTR     lpCmdLine,
-                     _In_ int       nCmdShow
-                     )
+int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 #else
   int main(int argc, char *argv[])
 #endif
