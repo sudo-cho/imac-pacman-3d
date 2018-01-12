@@ -11,8 +11,9 @@ Player::Player(glm::vec2 pos, int dir) : Entity (pos,dir,"player") {
 
 }
 
-void Player::takeDamage(){
+void Player::takeDamage(Hud &hud){
   health--;
+  hud.removeHeart();
 }
 
 int Player::getHealth(){

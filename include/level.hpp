@@ -34,6 +34,6 @@ public:
 	Case getCaseFromPos(glm::vec2);
 	int getMapValueCase(glm::vec2);
 
-	void moveObjects(Player *player);
-	void playerContact(Player *player, Ghost ghost);
+	void moveObjects(Player *player, Hud &hud);
+	void playerContact(Player *player, Ghost ghost, Hud &hud);
 };

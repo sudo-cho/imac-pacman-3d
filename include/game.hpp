@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
@@ -22,6 +23,7 @@
 #include "camera.hpp"
 #include <startMenu.hpp>
 #include <mainMenu.hpp>
+#include <hud.hpp>
 
 using namespace glimac;
 
@@ -35,7 +37,8 @@ class Game{
   Player player;
   PathDraw path;
   StartMenu smenu;
-  MainMenu mmenu;
+  MainMenu mmenu, emenu;
+  Hud hud;
 public:
   Game();
   ~Game();

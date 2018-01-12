@@ -1,5 +1,14 @@
 #pragma once
 
+#include <glimac/common.hpp>
+#include <glimac/glm.hpp>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 #include <glimac/Image.hpp>
 
 static GLuint texFromFile(std::string path) {

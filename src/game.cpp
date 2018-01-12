@@ -8,6 +8,7 @@ Game::Game ()
   , player(Player(glm::vec2(level.begin.position.x, level.begin.position.y), 3))
   , smenu(StartMenu(0, 1))
   , mmenu(MainMenu(0, 2))
+  , emenu(MainMenu(0, 2))
 {
   this->initWindow();
   this->initProgram();
@@ -70,11 +71,19 @@ void Game::render () {
     if(mmenu.getMainMenuStatus() == 1) {
       mmenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
     }
+    else if (player.getHealth() == 0) {
+      // game.reset();
+      emenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
+    }
     else {
       if (!camera.cameraChange()) {
         player.playerChangeDir(camera);
-        level.moveObjects(&player);
+        level.moveObjects(&player, hud);
         SDL_Delay(70);
+      }
+
+      for (std::vector<Heart>::iterator it = hud.hearts.begin(); it != hud.hearts.end(); ++it) {
+        it->drawHeart(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
       }
 
       if (camera.currentState == 0){
@@ -99,4 +108,10 @@ void Game::initMenu () {
   mmenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string textsMain[2] = {"reprendre", "quitter"};
   mmenu.initQuadMenu(textsMain);
+
+  emenu.setTexture(texFromFile("assets/textures/menu/gameover.png"));
+  std::string textsEnd[2] = {"recommencer", "quitter"};
+  emenu.initQuadMenu(textsEnd);
+
+  hud.initHearts();
 }

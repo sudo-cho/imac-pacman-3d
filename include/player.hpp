@@ -2,6 +2,7 @@
 
 #include "entity.hpp"
 #include "camera.hpp"
+#include "hud.hpp"
 
 class Player : public Entity{
 private:
@@ -12,7 +13,7 @@ public:
 
   int getHealth();
 
-  void takeDamage();
+  void takeDamage(Hud &hud);
   void playerChangeDir(Camera &camera);
 
   glm::vec2 position;
