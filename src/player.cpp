@@ -20,18 +20,8 @@ int Player::getHealth(){
 }
 
 
-void Player::playerChangeDir(Camera &camera, MainMenu &menu){
+void Player::playerChangeDir(Camera &camera){
   const Uint8 *state = SDL_GetKeyboardState(NULL);
-
-  if (state[SDL_SCANCODE_ESCAPE]){
-    if( menu.getMainMenuStatus() == 0) {
-      menu.setMainMenuStatus(1);
-    }
-    else {
-      menu.setMainMenuStatus(0);
-    }
-    return;
-  }
 
   if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]){
     if (camera.currentState == 1){

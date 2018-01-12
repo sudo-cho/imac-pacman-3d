@@ -20,9 +20,10 @@ class Button {
   GLuint tex{0};
   glm::mat4 ProjMatrix, MVPMatrix, MVMatrix, NormalMatrix;
   GLuint vbo, vao;
+  int m_pos, nbButtons;
 
 public:
-  Button(std::string t_text, GLuint t_tex);
+  Button(std::string t_text, GLuint t_tex, int t_pos, int nbButtons);
   ~Button();
 
   void initButton();

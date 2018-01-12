@@ -77,12 +77,12 @@ void Menu::initQuadMenu (std::string text[]) {
 
   // init buttons
   for (int i = 0; i < nbButtons; i++) {
-    buttons.push_back(Button(text[i], texFromFile("assets/textures/menu/button.png")));
+    buttons.push_back(Button(text[i], texFromFile("assets/textures/menu/button.png"), i, nbButtons));
   }
 
 }
 
-GLuint Menu::setTexture (const GLuint path) {
+void Menu::setTexture (const GLuint path) {
   this->tex = path;
 }
 

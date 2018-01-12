@@ -2,7 +2,6 @@
 
 #include "entity.hpp"
 #include "camera.hpp"
-#include <mainMenu.hpp>
 
 class Player : public Entity{
 private:
@@ -14,7 +13,7 @@ public:
   int getHealth();
 
   void takeDamage();
-  void playerChangeDir(Camera &camera,  MainMenu &menu);
+  void playerChangeDir(Camera &camera);
 
   glm::vec2 position;
   glm::vec2 nextPos;

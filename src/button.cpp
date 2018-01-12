@@ -5,8 +5,8 @@ struct Vertex2DUV{
   Vertex2DUV(float x, float y, float u, float v);
 };
 
-Button::Button (std::string t_text, GLuint t_tex)
-  : text(t_text), tex(t_tex)
+Button::Button (std::string t_text, GLuint t_tex, int t_pos, int nbButtons)
+  : text(t_text), tex(t_tex), m_pos(t_pos), nbButtons(nbButtons)
 {
   this->initButton();
 }
@@ -48,7 +48,17 @@ void Button::initButton () {
 void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture) {
   glBindVertexArray(this->vao);
 
-  glm::mat4 MVMat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, -0.24f, -0.5f));
+  glm::mat4 MVMat;
+  if (m_pos == 0 && nbButtons == 1) {
+    MVMat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, -0.24f, -0.5f));
+  }
+  else if (m_pos == 0 && nbButtons > 1) {
+    MVMat = glm::translate(glm::mat4(1.f), glm::vec3(-0.2f, -0.24f, -0.5f));
+  }
+  else {
+    MVMat = glm::translate(glm::mat4(1.f), glm::vec3(0.2f, -0.24f, -0.5f));
+  }
+
   MVMat = glm::rotate(MVMat, 3.14159f, glm::vec3(0.f, 1.f, 0.f));
   MVMatrix = MVMat;
 
@@ -67,5 +77,4 @@ void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLui
   glActiveTexture(GL_TEXTURE0);
 
   glBindVertexArray(0);
-
 }

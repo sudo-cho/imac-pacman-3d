@@ -62,7 +62,7 @@ void Game::initProgram () {
 }
 void Game::render () {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+  mmenu.handleInputs();
   if (smenu.getMenuStatus() == 0) {
     smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
   }
@@ -72,7 +72,7 @@ void Game::render () {
     }
     else {
       if (!camera.cameraChange()) {
-        player.playerChangeDir(camera, mmenu);
+        player.playerChangeDir(camera);
         level.moveObjects(&player);
         SDL_Delay(50);
       }
@@ -94,6 +94,7 @@ void Game::initMenu () {
   smenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string texts[1] = {"commencer"};
   smenu.initQuadMenu(texts);
+
   mmenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string textsMain[2] = {"reprendre", "quitter"};
   mmenu.initQuadMenu(textsMain);

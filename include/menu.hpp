@@ -15,6 +15,6 @@ public:
 
   void drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture);
   void initQuadMenu(std::string text[]);
-  GLuint setTexture(const GLuint path);
+  void setTexture(const GLuint path);
   int getMenuStatus();
 };

@@ -8,6 +8,6 @@ class MainMenu : public Menu {
 public:
   using Menu::Menu;
 
-  void setMainMenuStatus(const int value);
   int getMainMenuStatus();
+  void handleInputs();
 };
