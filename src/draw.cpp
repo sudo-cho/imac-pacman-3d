@@ -405,6 +405,52 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
       MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(1, 0, 0));
       pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
 
+      //dessin pacgums
+      if (level.map[i].ifPacgum == 1){
+        Sphere sphere(0.1f, 32, 16);
+        SphereDraw pacgum (&sphere);
+        pacgum.ProjMatrix = pathWall.ProjMatrix;
+        glm::mat4 MVMatGum = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatGum, uTexture, PacgumSphere, level.statePacman);
+      }
+      else if (level.map[i].ifPacgum == 2){
+        Sphere sphere(0.2f, 32, 16);
+        SphereDraw pacgum (&sphere);
+        pacgum.ProjMatrix = pathWall.ProjMatrix;
+        glm::mat4 MVMatSGum = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatSGum, uTexture, SuperPacgumSphere, level.statePacman);
+      }
+
+      // dessin Fantomes
+      Sphere sphere(0.3f, 32, 16);
+      if (level.shadow.comparePos(level.shadow.position,level.map[i].position)){
+        SphereDraw ghostShadow (&sphere);
+        ghostShadow.ProjMatrix = pathWall.ProjMatrix;
+        glm::mat4 MVMatShadow = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
+        ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatShadow, uTexture, ShadowSphere, level.statePacman);
+      }
+      
+      else if (level.speedy.comparePos(level.speedy.position,level.map[i].position)){
+        SphereDraw ghostSpeedy (&sphere);
+        ghostSpeedy.ProjMatrix = pathWall.ProjMatrix;
+        glm::mat4 MVMatSpeedy = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
+        ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatSpeedy, uTexture, SpeedySphere, level.statePacman);
+      }
+
+      else if (level.bashful.comparePos(level.bashful.position,level.map[i].position)){
+        SphereDraw ghostBashful (&sphere);
+        ghostBashful.ProjMatrix = pathWall.ProjMatrix;
+        glm::mat4 MVMatBashful = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
+        ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatBashful, uTexture, BashfulSphere, level.statePacman);
+      }
+
+      else if (level.pokey.comparePos(level.pokey.position,level.map[i].position)){
+        SphereDraw ghostPokey (&sphere);
+        ghostPokey.ProjMatrix = pathWall.ProjMatrix;
+        glm::mat4 MVMatPokey = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
+        ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatPokey, uTexture, PokeySphere, level.statePacman);
+      }
+/*
       // dessin murs
       if (level.map[i-1].type == 0){
         // direction nord
@@ -479,6 +525,7 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
 
         pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
       }
+      */
     }
   }
 }

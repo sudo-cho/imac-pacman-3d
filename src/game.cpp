@@ -74,11 +74,12 @@ void Game::render () {
       if (!camera.cameraChange()) {
         player.playerChangeDir(camera);
         level.moveObjects(&player);
-        SDL_Delay(50);
+        SDL_Delay(70);
       }
 
       if (camera.currentState == 0){
         path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+        SDL_Delay(150);
       }
       else {
         path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
