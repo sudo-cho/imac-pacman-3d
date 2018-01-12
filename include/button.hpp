@@ -27,5 +27,5 @@ public:
   ~Button();
 
   void initButton();
-  void drawButton(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture);
+  void drawButton(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture, GLint, GLint, GLint, GLint, GLint);
 };

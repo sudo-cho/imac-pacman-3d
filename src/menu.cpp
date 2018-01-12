@@ -11,7 +11,7 @@ Menu::Menu (GLuint t_tex, int t_nbButtons)
 
 Menu::~Menu () {}
 
-void Menu::drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture) {
+void Menu::drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent ) {
   glBindVertexArray(this->vao);
 
   glm::mat4 MVMat = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -1.f));
@@ -21,6 +21,13 @@ void Menu::drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint l
   glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
   glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  glUniform1i(uIsTransparent, 1);
+	glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0,0,0)));
+  glUniform3fv(uLightDir_vs, 1, glm::value_ptr(glm::vec3(0,0,0)));
+
 
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
@@ -35,7 +42,7 @@ void Menu::drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint l
   glBindVertexArray(0);
 
   for(int i = 0; i < nbButtons; ++i) {
-    buttons[i].drawButton(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
+    buttons[i].drawButton(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
   }
 
   const Uint8 *state = SDL_GetKeyboardState(NULL);

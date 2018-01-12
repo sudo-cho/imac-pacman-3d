@@ -29,7 +29,7 @@ using namespace glimac;
 
 class Game{
   GLuint locationMVPMatrix = 0, locationMVMatrix = 0, locationNormalMatrix = 0;
-  GLint uTexture = 0;
+  GLint uTexture = 0, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent;
   SDL_Window * window;
   SDL_GLContext glcontext;
   Level level;

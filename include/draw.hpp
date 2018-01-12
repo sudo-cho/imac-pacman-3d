@@ -45,7 +45,8 @@ public:
   ~SphereDraw();
 
   void drawSphere(Sphere*, GLuint, GLuint, GLuint);
-  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int, int);
+  void drawSphereObjects(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int, int, GLint, GLint, GLint, GLint, GLint);
+  void drawSphereObjects2(Sphere*, GLuint, GLuint, GLuint, glm::mat4, GLint, int, int, GLint, GLint, GLint, GLint, GLint);
 };
 
 class WallDraw{
@@ -59,8 +60,8 @@ public:
   WallDraw();
   ~WallDraw();
 
-  void drawWall(GLuint, GLuint, GLuint, glm::mat4, GLint);
-  void drawPathWall(GLuint, GLuint, GLuint, glm::mat4, GLint);
+  void drawWall(GLuint, GLuint, GLuint, glm::mat4, GLint, GLint, GLint, GLint, GLint, GLint);
+  void drawPathWall(GLuint, GLuint, GLuint, glm::mat4, GLint, GLint, GLint, GLint, GLint, GLint);
 
 };
 
@@ -69,7 +70,7 @@ public:
 	PathDraw();
 	~PathDraw();
 
-	void drawPathFirstPerson(GLuint, GLuint, GLuint, Level, Player, GLint);
-  void drawPathThirdPerson(GLuint, GLuint, GLuint, Level, Player, GLint);
+	void drawPathFirstPerson(GLuint, GLuint, GLuint, Level, Player, GLint, GLint, GLint, GLint, GLint, GLint);
+  void drawPathThirdPerson(GLuint, GLuint, GLuint, Level, Player, GLint, GLint, GLint, GLint, GLint, GLint);
 };
 

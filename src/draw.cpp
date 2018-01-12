@@ -97,10 +97,9 @@ void SphereDraw::drawSphere(Sphere *sphere, GLuint locationMVPMatrix, GLuint loc
 
   glDrawArrays(GL_TRIANGLES, 0, sphere->getVertexCount());
   glBindVertexArray(0);
-
 }
 
-void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, int typeObject, int gameState){
+void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, int typeObject, int gameState, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent) {
 
   glBindVertexArray(this->vao);
 
@@ -109,6 +108,12 @@ void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLu
   glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
   glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  glUniform1i(uIsTransparent, 1);
+	glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0,0,0)));
+  glUniform3fv(uLightDir_vs, 1, glm::value_ptr(glm::vec3(0,0,0)));
 
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
@@ -140,7 +145,54 @@ void SphereDraw::drawSphereObjects(Sphere *sphere, GLuint locationMVPMatrix, GLu
   glActiveTexture(GL_TEXTURE0);
 
   glBindVertexArray(0);
+}
 
+void SphereDraw::drawSphereObjects2(Sphere *sphere, GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, int typeObject, int gameState, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent) {
+
+  glBindVertexArray(this->vao);
+
+  MVMatrix = MVMat;
+
+  glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
+  glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+  glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0.8,0.8,0.8)));
+  glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0.7,0.7,0.7)));
+  glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0.5,0.5,0.5)));
+  glUniform3fv(uLightDir_vs, 1, glm::value_ptr(glm::vec3(0.5,0.5,0.5)));
+  glUniform1i(uIsTransparent, 1);
+
+  static const size_t TEXUNIT = 0;
+  glUniform1i(uTexture, TEXUNIT);
+  glActiveTexture(GL_TEXTURE0 + TEXUNIT);
+  if (gameState == 0){
+    if (typeObject == 1) {
+      glBindTexture(GL_TEXTURE_2D, this->texShadow);
+    }
+    else if (typeObject == 2) {
+      glBindTexture(GL_TEXTURE_2D, this->texSpeedy);
+    }
+    else if (typeObject == 3){
+      glBindTexture(GL_TEXTURE_2D, this->texBashful);
+    }
+    else if (typeObject == 4){
+      glBindTexture(GL_TEXTURE_2D, this->texPokey);
+    }
+  }
+  else {
+    glBindTexture(GL_TEXTURE_2D, this->texGhostHunted);
+  }
+  if (typeObject == 0){ glBindTexture(GL_TEXTURE_2D, this->texPacman); }
+  else if (typeObject == 5){ glBindTexture(GL_TEXTURE_2D, this->texPacgum); }
+  else if (typeObject == 6){ glBindTexture(GL_TEXTURE_2D, this->texSuperPacgum); }
+
+  glDrawArrays(GL_TRIANGLES, 0, sphere->getVertexCount());
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE0);
+
+  glBindVertexArray(0);
 }
 
 SphereDraw::~SphereDraw(){
@@ -217,7 +269,7 @@ glm::mat3 rotate(float a) {
   return M;
 }
 
-void WallDraw::drawWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture){
+void WallDraw::drawWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent){
 
   glBindVertexArray(this->vao);
 
@@ -226,6 +278,12 @@ void WallDraw::drawWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuin
   glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
   glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  glUniform1i(uIsTransparent, 1);
+	glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0,0,0)));
+  glUniform3fv(uLightDir_vs, 1, glm::value_ptr(glm::vec3(0,0,0)));
 
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
@@ -240,7 +298,7 @@ void WallDraw::drawWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuin
   glBindVertexArray(0);
 }
 
-void WallDraw::drawPathWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture){
+void WallDraw::drawPathWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, glm::mat4 MVMat, GLint uTexture, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent){
 
   glBindVertexArray(this->vao);
 
@@ -249,6 +307,12 @@ void WallDraw::drawPathWall(GLuint locationMVPMatrix, GLuint locationMVMatrix, G
   glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
   glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  glUniform1i(uIsTransparent, 1);
+	glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0,0,0)));
+  glUniform3fv(uLightDir_vs, 1, glm::value_ptr(glm::vec3(0,0,0)));
 
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
@@ -269,7 +333,7 @@ PathDraw::PathDraw(){
 PathDraw::~PathDraw(){
 }
 
-void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, Level level, Player player, GLint uTexture){
+void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, Level level, Player player, GLint uTexture, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent){
   glm::mat4 MVMat = glm::mat4(1.f);
   static WallDraw pathWall;
 
@@ -283,31 +347,31 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
       int translateY = level.map[i].position.y - (int)level.height/2;
 
       MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-18));
-      pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
       // dessin murs
       if (level.map[i-1].type == 0){
         glm::mat4 MVMatWallL = glm::translate(MVMat, glm::vec3(-0.5f, 0, 0.5f));
         MVMatWallL = glm::rotate(MVMatWallL, 1.5708f, glm::vec3(0, 0, 1));
         MVMatWallL = glm::rotate(MVMatWallL, 1.5708f, glm::vec3(1, 0, 0));
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallL,uTexture);
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallL,uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
       if (level.map[i+1].type == 0){
         glm::mat4 MVMatWallR = glm::translate(MVMat, glm::vec3(0.5f, 0, 0.5f));
         MVMatWallR = glm::rotate(MVMatWallR, 1.5708f, glm::vec3(0, 0, 1));
         MVMatWallR = glm::rotate(MVMatWallR, 1.5708f, glm::vec3(1, 0, 0));
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallR,uTexture);
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallR,uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
       if (level.map[i-level.width].type == 0){
         glm::mat4 MVMatWallU = glm::translate(MVMat, glm::vec3(0, 0.5f, 0.5f));
         MVMatWallU = glm::rotate(MVMatWallU, 1.5708f, glm::vec3(1, 0, 0));
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallU,uTexture);
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallU,uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
       if (level.map[i+level.width].type == 0){
         glm::mat4 MVMatWallD = glm::translate(MVMat, glm::vec3(0, -0.5f, 0.5f));
         MVMatWallD = glm::rotate(MVMatWallD, 1.5708f, glm::vec3(1, 0, 0));
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallD,uTexture);
+        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMatWallD,uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
       //dessin pacgums
@@ -316,14 +380,14 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
         SphereDraw pacgum (&sphere);
         pacgum.ProjMatrix = pathWall.ProjMatrix;
         MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacgumSphere, level.statePacman);
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacgumSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
       else if (level.map[i].ifPacgum == 2){
         Sphere sphere(0.3f, 32, 16);
         SphereDraw pacgum (&sphere);
         pacgum.ProjMatrix = pathWall.ProjMatrix;
         MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SuperPacgumSphere, level.statePacman);
+        pacgum.drawSphereObjects2(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SuperPacgumSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
     }
@@ -336,7 +400,7 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   int translateX = player.position.x - (int)level.width/2;
   int translateY = player.position.y - (int)level.height/2;
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  pacman.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacmanSphere, level.statePacman);
+  pacman.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PacmanSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
   // dessin Fantomes
   SphereDraw ghostShadow (&sphere);
@@ -344,28 +408,28 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
   translateX = level.shadow.position.x - (int)level.width/2;
   translateY = level.shadow.position.y - (int)level.height/2;
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, ShadowSphere, level.statePacman);
+  ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, ShadowSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
   SphereDraw ghostSpeedy (&sphere);
   ghostSpeedy.ProjMatrix = pathWall.ProjMatrix;
   translateX = level.speedy.position.x - (int)level.width/2;
   translateY = level.speedy.position.y - (int)level.height/2;
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SpeedySphere, level.statePacman);
+  ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, SpeedySphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
   SphereDraw ghostBashful (&sphere);
   ghostBashful.ProjMatrix = pathWall.ProjMatrix;
   translateX = level.bashful.position.x - (int)level.width/2;
   translateY = level.bashful.position.y - (int)level.height/2;
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, BashfulSphere, level.statePacman);
+  ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, BashfulSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
   SphereDraw ghostPokey (&sphere);
   ghostPokey.ProjMatrix = pathWall.ProjMatrix;
   translateX = level.pokey.position.x - (int)level.width/2;
   translateY = level.pokey.position.y - (int)level.height/2;
   MVMat = glm::translate (glm::mat4(1.f), glm::vec3(translateX,-translateY,-17.5f));
-  ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PokeySphere, level.statePacman);
+  ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMat, uTexture, PokeySphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
   pathWall.ProjMatrix = glm::rotate(pathWall.ProjMatrix, 0.4f, glm::vec3(1,0,0));
   pathWall.ProjMatrix = glm::translate(pathWall.ProjMatrix, glm::vec3(0,-9,0));
@@ -378,7 +442,7 @@ void PathDraw::drawPathThirdPerson(GLuint locationMVPMatrix, GLuint locationMVMa
 
 }
 
-void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, Level level, Player player, GLint uTexture){
+void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, Level level, Player player, GLint uTexture, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent){
   glm::mat4 MVMat = glm::mat4(1.f);
   static WallDraw pathWall;
 
@@ -403,7 +467,7 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
 
       MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,-0.5f,translateZ));
       MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(1, 0, 0));
-      pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      pathWall.drawPathWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
 
       //dessin pacgums
       if (level.map[i].ifPacgum == 1){
@@ -411,14 +475,14 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
         SphereDraw pacgum (&sphere);
         pacgum.ProjMatrix = pathWall.ProjMatrix;
         glm::mat4 MVMatGum = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
-        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatGum, uTexture, PacgumSphere, level.statePacman);
+        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatGum, uTexture, PacgumSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
       else if (level.map[i].ifPacgum == 2){
         Sphere sphere(0.2f, 32, 16);
         SphereDraw pacgum (&sphere);
         pacgum.ProjMatrix = pathWall.ProjMatrix;
         glm::mat4 MVMatSGum = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
-        pacgum.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatSGum, uTexture, SuperPacgumSphere, level.statePacman);
+        pacgum.drawSphereObjects2(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatSGum, uTexture, SuperPacgumSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
       // dessin Fantomes
@@ -427,103 +491,103 @@ void PathDraw::drawPathFirstPerson(GLuint locationMVPMatrix, GLuint locationMVMa
         SphereDraw ghostShadow (&sphere);
         ghostShadow.ProjMatrix = pathWall.ProjMatrix;
         glm::mat4 MVMatShadow = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
-        ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatShadow, uTexture, ShadowSphere, level.statePacman);
+        ghostShadow.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatShadow, uTexture, ShadowSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
-      
+
       else if (level.speedy.comparePos(level.speedy.position,level.map[i].position)){
         SphereDraw ghostSpeedy (&sphere);
         ghostSpeedy.ProjMatrix = pathWall.ProjMatrix;
         glm::mat4 MVMatSpeedy = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
-        ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatSpeedy, uTexture, SpeedySphere, level.statePacman);
+        ghostSpeedy.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatSpeedy, uTexture, SpeedySphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
       else if (level.bashful.comparePos(level.bashful.position,level.map[i].position)){
         SphereDraw ghostBashful (&sphere);
         ghostBashful.ProjMatrix = pathWall.ProjMatrix;
         glm::mat4 MVMatBashful = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
-        ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatBashful, uTexture, BashfulSphere, level.statePacman);
+        ghostBashful.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatBashful, uTexture, BashfulSphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
       else if (level.pokey.comparePos(level.pokey.position,level.map[i].position)){
         SphereDraw ghostPokey (&sphere);
         ghostPokey.ProjMatrix = pathWall.ProjMatrix;
         glm::mat4 MVMatPokey = glm::translate (MVMat, glm::vec3(0,0,-0.3f));
-        ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatPokey, uTexture, PokeySphere, level.statePacman);
+        ghostPokey.drawSphereObjects(&sphere,locationMVPMatrix,locationMVMatrix,locationNormalMatrix, MVMatPokey, uTexture, PokeySphere, level.statePacman, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
-/*
+      /*
       // dessin murs
       if (level.map[i-1].type == 0){
-        // direction nord
-        if (player.direction == 0) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX -0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        // direction sud
-        else if (player.direction == 2) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX +0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        // direction est
-        else if (player.direction == 1) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
-        // direction ouest
-        else if (player.direction == 3) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
+      // direction nord
+      if (player.direction == 0) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX -0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      // direction sud
+      else if (player.direction == 2) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX +0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      // direction est
+      else if (player.direction == 1) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
+      // direction ouest
+      else if (player.direction == 3) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
 
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
       }
       if (level.map[i+1].type == 0){
-        // direction nord
-        if (player.direction == 0) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX + 0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        // direction sud
-        else if (player.direction == 2) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX - 0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        // direction est
-        else if (player.direction == 1) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
-        // direction ouest
-        else if (player.direction == 3) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
+      // direction nord
+      if (player.direction == 0) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX + 0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      // direction sud
+      else if (player.direction == 2) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX - 0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      // direction est
+      else if (player.direction == 1) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
+      // direction ouest
+      else if (player.direction == 3) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
 
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
       }
       if (level.map[i-level.width].type == 0){
-        // direction est
-        if (player.direction == 1) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX - 0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        // direction ouest
-        else if (player.direction == 3) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX + 0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        //direction nord
-        else if (player.direction == 0) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
-        //direction sud
-        else if (player.direction == 2) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
+      // direction est
+      if (player.direction == 1) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX - 0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      // direction ouest
+      else if (player.direction == 3) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX + 0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      //direction nord
+      else if (player.direction == 0) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
+      //direction sud
+      else if (player.direction == 2) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
 
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
       }
 
       if (level.map[i+level.width].type == 0){
-        // direction est
-        if (player.direction == 1) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX + 0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        // direction ouest
-        else if (player.direction == 3) {
-          MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX - 0.5f,0.f,translateZ));
-          MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
-        }
-        //direction nord
-        else if (player.direction == 0) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
-        //direction sud
-        else if (player.direction == 2) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
+      // direction est
+      if (player.direction == 1) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX + 0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      // direction ouest
+      else if (player.direction == 3) {
+      MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX - 0.5f,0.f,translateZ));
+      MVMat = glm::rotate(MVMat, 1.5708f, glm::vec3(0, 1, 0));
+      }
+      //direction nord
+      else if (player.direction == 0) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ + 0.5f));
+      //direction sud
+      else if (player.direction == 2) MVMat = glm::translate (glm::mat4(1.f), glm::vec3(-translateX,0.f,translateZ - 0.5f));
 
-        pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
+      pathWall.drawWall(locationMVPMatrix,locationMVMatrix,locationNormalMatrix,MVMat,uTexture);
       }
       */
     }

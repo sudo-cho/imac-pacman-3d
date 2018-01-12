@@ -16,7 +16,7 @@ public:
   ~Heart();
 
   void initHeart();
-  void drawHeart(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture);
+  void drawHeart(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture, GLint, GLint, GLint, GLint, GLint);
 };
 
 class Hud {

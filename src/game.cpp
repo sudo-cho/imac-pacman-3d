@@ -60,20 +60,28 @@ void Game::initProgram () {
   locationMVMatrix = glGetUniformLocation(program.getGLId(), "uMVMatrix");
   locationNormalMatrix = glGetUniformLocation(program.getGLId(), "uNormalMatrix");
   uTexture = glGetUniformLocation(program.getGLId(), "uTexture");
+
+  // Lights
+  uKd = glGetUniformLocation(program.getGLId(),"uKd");
+  uKs = glGetUniformLocation(program.getGLId(),"uKs");
+  uLightDir_vs = glGetUniformLocation(program.getGLId(),"uLightDir_vs");
+  uLightIntensity = glGetUniformLocation(program.getGLId(),"uLightIntensity");
+  uIsTransparent = glGetUniformLocation(program.getGLId(),"uIsTransparent");
 }
+
 void Game::render () {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   mmenu.handleInputs();
   if (smenu.getMenuStatus() == 0) {
-    smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
+    smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
   }
   else {
     if(mmenu.getMainMenuStatus() == 1) {
-      mmenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
+      mmenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
     }
     else if (player.getHealth() == 0) {
       // game.reset();
-      emenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
+      emenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
     }
     else {
       if (!camera.cameraChange()) {
@@ -83,15 +91,15 @@ void Game::render () {
       }
 
       for (std::vector<Heart>::iterator it = hud.hearts.begin(); it != hud.hearts.end(); ++it) {
-        it->drawHeart(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture);
+        it->drawHeart(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
 
       if (camera.currentState == 0){
-        path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+        path.drawPathFirstPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
         SDL_Delay(150);
       }
       else {
-        path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture);
+        path.drawPathThirdPerson(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, level, player, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
       }
     }
   }

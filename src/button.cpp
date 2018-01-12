@@ -45,7 +45,7 @@ void Button::initButton () {
   NormalMatrix = glm::transpose(glm::inverse(MVMatrix));
 }
 
-void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture) {
+void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture, GLint uKd, GLint uKs, GLint uLightDir_vs, GLint uLightIntensity, GLint uIsTransparent) {
   glBindVertexArray(this->vao);
 
   glm::mat4 MVMat;
@@ -65,6 +65,12 @@ void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLui
   glUniformMatrix4fv(locationMVPMatrix, 1, GL_FALSE, glm::value_ptr(ProjMatrix * MVMatrix));
   glUniformMatrix4fv(locationMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(locationNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+  glUniform1i(uIsTransparent, 1);
+	glUniform3fv(uKd, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uKs, 1, glm::value_ptr(glm::vec3(0,0,0)));
+	glUniform3fv(uLightIntensity, 1, glm::value_ptr(glm::vec3(0,0,0)));
+  glUniform3fv(uLightDir_vs, 1, glm::value_ptr(glm::vec3(0,0,0)));
 
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);

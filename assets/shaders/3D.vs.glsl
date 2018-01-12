@@ -14,16 +14,18 @@ uniform mat4 uNormalMatrix;
 out vec3 vPosition_vs;
 out vec3 vNormal_vs;
 out vec2 vTexCoords;
+out vec4 vTotal;
 
 void main() {
-
   // Passage en coordonnées homogènes
   vec4 vertexPosition = vec4(aVertexPosition, 1);
+  vec4 vertexNormal = vec4(aVertexNormal, 0);
 
   // Calcul de la position projetée
-  gl_Position = uMVPMatrix * vertexPosition;
-
-  vPosition_vs = aVertexPosition;
-  vNormal_vs = aVertexNormal;
+  vPosition_vs = vec3(uMVMatrix * vertexPosition);
+  vNormal_vs = vec3(uNormalMatrix * vertexNormal);
   vTexCoords = aVertexTexCoords;
+
+  gl_Position = uMVPMatrix * vertexPosition;
+  vTotal = gl_Position;
 }
