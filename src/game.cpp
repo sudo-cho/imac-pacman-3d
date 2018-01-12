@@ -111,15 +111,18 @@ void Game::render () {
 void Game::initMenu () {
   smenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string texts[1] = {"commencer"};
-  smenu.initQuadMenu(texts);
+  std::string tex[1] = {"assets/textures/menu/buttonstartselected.png"};
+  smenu.initQuadMenu(texts, tex);
 
   mmenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string textsMain[2] = {"reprendre", "quitter"};
-  mmenu.initQuadMenu(textsMain);
+  std::string texMain[2] = {"assets/textures/menu/buttonresume.png","assets/textures/menu/buttonquit.png"};
+  mmenu.initQuadMenu(textsMain, texMain);
 
   emenu.setTexture(texFromFile("assets/textures/menu/gameover.png"));
   std::string textsEnd[2] = {"recommencer", "quitter"};
-  emenu.initQuadMenu(textsEnd);
+  std::string texEnd[2] = {"assets/textures/menu/buttonrestart.png","assets/textures/menu/buttonquit.png"};
+  emenu.initQuadMenu(textsEnd, texEnd);
 
   hud.initHearts();
 }
