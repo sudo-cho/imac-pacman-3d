@@ -10,4 +10,5 @@ public:
 
   int getMainMenuStatus();
   void handleInputs();
+  void handleGlobalInputs();
 };

@@ -51,7 +51,7 @@ void Menu::drawMenu (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint l
   }
 }
 
-void Menu::initQuadMenu (std::string text[], std::string tex[]) {
+void Menu::initQuadMenu (std::string text[], std::string tex[], std::string texS[]) {
   glGenBuffers(1, &this->vbo);
   glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
 
@@ -84,7 +84,7 @@ void Menu::initQuadMenu (std::string text[], std::string tex[]) {
 
   // init buttons
   for (int i = 0; i < nbButtons; i++) {
-    buttons.push_back(Button(text[i], texFromFile(tex[i]), i, nbButtons));
+    buttons.push_back(Button(text[i], texFromFile(tex[i]), texFromFile(texS[i]), i, nbButtons));
   }
 
 }

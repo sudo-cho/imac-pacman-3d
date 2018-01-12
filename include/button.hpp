@@ -17,15 +17,16 @@
 
 class Button {
   std::string text;
-  GLuint tex{0};
+  GLuint tex{0}, texS{0};
   glm::mat4 ProjMatrix, MVPMatrix, MVMatrix, NormalMatrix;
   GLuint vbo, vao;
   int m_pos, nbButtons;
-
+  int cursor;
 public:
-  Button(std::string t_text, GLuint t_tex, int t_pos, int nbButtons);
+  Button(std::string t_text, GLuint t_tex, GLuint t_texS, int t_pos, int nbButtons);
   ~Button();
 
   void initButton();
   void drawButton(GLuint locationMVPMatrix, GLuint locationMVMatrix, GLuint locationNormalMatrix, GLint uTexture, GLint, GLint, GLint, GLint, GLint);
+  void swapTexture();
 };

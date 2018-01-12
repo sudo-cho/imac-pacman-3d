@@ -5,9 +5,10 @@ struct Vertex2DUV{
   Vertex2DUV(float x, float y, float u, float v);
 };
 
-Button::Button (std::string t_text, GLuint t_tex, int t_pos, int nbButtons)
-  : text(t_text), tex(t_tex), m_pos(t_pos), nbButtons(nbButtons)
+Button::Button (std::string t_text, GLuint t_tex, GLuint t_texS, int t_pos, int nbButtons)
+  : text(t_text), tex(t_tex), texS(t_texS), m_pos(t_pos), nbButtons(nbButtons)
 {
+  cursor = m_pos;
   this->initButton();
 }
 
@@ -75,7 +76,16 @@ void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLui
   static const size_t TEXUNIT = 0;
   glUniform1i(uTexture, TEXUNIT);
   glActiveTexture(GL_TEXTURE0 + TEXUNIT);
-  glBindTexture(GL_TEXTURE_2D, this->tex);
+
+  if(nbButtons == 0) {
+    glBindTexture(GL_TEXTURE_2D, this->texS);
+  }
+
+  if (cursor == 0) {
+    glBindTexture(GL_TEXTURE_2D, this->texS);
+  } else {
+    glBindTexture(GL_TEXTURE_2D, this->tex);
+  }
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -83,4 +93,12 @@ void Button::drawButton (GLuint locationMVPMatrix, GLuint locationMVMatrix, GLui
   glActiveTexture(GL_TEXTURE0);
 
   glBindVertexArray(0);
+}
+
+void Button::swapTexture () {
+  if( cursor == 1) {
+    cursor = 0;
+  } else {
+    cursor = 1;
+  }
 }

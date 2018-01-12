@@ -71,19 +71,22 @@ void Game::initProgram () {
 
 void Game::render () {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  mmenu.handleInputs();
+  mmenu.handleGlobalInputs();
   if (smenu.getMenuStatus() == 0) {
     smenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
   }
   else {
     if(mmenu.getMainMenuStatus() == 1) {
       mmenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
+      mmenu.handleInputs();
     }
     else if (player.getHealth() == 0) {
       // game.reset();
       emenu.drawMenu(locationMVPMatrix, locationMVMatrix, locationNormalMatrix, uTexture, uKd, uKs, uLightDir_vs, uLightIntensity, uIsTransparent);
+      emenu.handleInputs();
     }
     else {
+
       if (!camera.cameraChange()) {
         player.playerChangeDir(camera);
         level.moveObjects(&player, hud);
@@ -111,18 +114,21 @@ void Game::render () {
 void Game::initMenu () {
   smenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string texts[1] = {"commencer"};
-  std::string tex[1] = {"assets/textures/menu/buttonstartselected.png"};
-  smenu.initQuadMenu(texts, tex);
+  std::string tex[1] = {"assets/textures/menu/buttonstart.png"};
+  std::string texS[1] = {"assets/textures/menu/buttonstartselected.png"};
+  smenu.initQuadMenu(texts, tex, texS);
 
   mmenu.setTexture(texFromFile("assets/textures/menu/startmenu.png"));
   std::string textsMain[2] = {"reprendre", "quitter"};
   std::string texMain[2] = {"assets/textures/menu/buttonresume.png","assets/textures/menu/buttonquit.png"};
-  mmenu.initQuadMenu(textsMain, texMain);
+  std::string texSMain[2] = {"assets/textures/menu/buttonresumeselected.png","assets/textures/menu/buttonquitselected.png"};
+  mmenu.initQuadMenu(textsMain, texMain, texSMain);
 
   emenu.setTexture(texFromFile("assets/textures/menu/gameover.png"));
   std::string textsEnd[2] = {"recommencer", "quitter"};
   std::string texEnd[2] = {"assets/textures/menu/buttonrestart.png","assets/textures/menu/buttonquit.png"};
-  emenu.initQuadMenu(textsEnd, texEnd);
+  std::string texSEnd[2] = {"assets/textures/menu/buttonrestartselected.png","assets/textures/menu/buttonquitselected.png"};
+  emenu.initQuadMenu(textsEnd, texEnd, texSEnd);
 
   hud.initHearts();
 }
